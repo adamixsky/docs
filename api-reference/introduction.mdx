@@ -1,0 +1,122 @@
+---
+title: 'API Introduction'
+description: 'Overview of the Outlight API capabilities and structure'
+---
+
+## Overview
+
+The Outlight API provides programmatic access to cryptocurrency token call data across social media channels. Track performance metrics, analyze channel statistics, and monitor token movements in real-time.
+
+## Base Configuration
+
+<ParamField body="base_url" type="string" required>
+  API Base URL: `https://prod.api.sauron.outlight.fun`
+</ParamField>
+
+<ParamField body="version" type="string" required>
+  API Version: `1.0.0`
+</ParamField>
+
+## Available Resources
+
+### 🔍 Channels API
+
+Track and analyze social media channels that make cryptocurrency calls:
+
+- **Search channels** - Find channels by keywords
+- **List channels** - Get paginated channel lists with metrics
+- **Channel details** - Retrieve comprehensive channel statistics
+- **Channel calls** - View tokens called by specific channels
+
+### 🪙 Tokens API
+
+Monitor and analyze token performance:
+
+- **Search tokens** - Find tokens by address, name, or symbol
+- **Recent tokens** - Get recently called tokens
+- **Most called tokens** - Discover trending tokens by call frequency
+- **Token details** - Access complete token information
+
+## Response Format
+
+All API endpoints return JSON responses with consistent structure:
+
+### Success Response
+
+```json
+{
+  "data": [...],
+  "count": 100,
+  "totalPages": 10,
+  "currentPage": 1
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human readable error message",
+    "details": {}
+  }
+}
+```
+
+## HTTP Status Codes
+
+| Status Code | Description |
+|------------|-------------|
+| 200 | Success - Request completed successfully |
+| 400 | Bad Request - Invalid parameters |
+| 404 | Not Found - Resource doesn't exist |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Internal Server Error |
+
+## Data Types
+
+### Dates and Times
+- All timestamps use ISO 8601 format
+- Example: `2025-10-08T12:00:00Z`
+
+### Numeric Values
+- Many numeric fields return as strings for precision
+- Examples: `fdv_at_call`, `current_gain`
+
+### Pagination
+- Most list endpoints support pagination
+- Use `page` and `limit` parameters
+- Pages start at 1
+
+## Supported Platforms
+
+The API tracks channels from:
+
+<CardGroup cols={2}>
+  <Card title="Telegram" icon="telegram">
+    Telegram channels and groups
+  </Card>
+  <Card title="Twitter/X" icon="x-twitter">
+    Twitter/X accounts
+  </Card>
+</CardGroup>
+
+## Rate Limits
+
+<Note>
+  Rate limits may apply to API endpoints. Monitor response headers for rate limit information.
+</Note>
+
+## Getting Started
+
+Ready to make your first API call? Check out our quickstart guide or explore specific endpoints:
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/introduction/quickstart">
+    Make your first API call
+  </Card>
+  <Card title="Search Channels" icon="search" href="/api-reference/channels/search-channels">
+    Find and analyze channels
+  </Card>
+</CardGroup>

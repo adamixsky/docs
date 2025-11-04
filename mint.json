@@ -1,0 +1,88 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Outlight.fun API",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@outlight.fun"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://outlight.fun"
+  },
+  "tabs": [
+    {
+      "name": "Documentation",
+      "url": "/"
+    },
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Documentation",
+      "pages": [
+        "index",
+        "introduction/welcome",
+        "introduction/quickstart"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction",
+        "api-reference/authentication"
+      ]
+    },
+    {
+      "group": "Channels",
+      "pages": [
+        "api-reference/channels/search-channels",
+        "api-reference/channels/list-channels",
+        "api-reference/channels/channel-details",
+        "api-reference/channels/channel-calls"
+      ]
+    },
+    {
+      "group": "Tokens",
+      "pages": [
+        "api-reference/tokens/search-tokens",
+        "api-reference/tokens/recent-tokens",
+        "api-reference/tokens/most-called-tokens",
+        "api-reference/tokens/token-details"
+      ]
+    },
+    {
+      "group": "Data Models",
+      "pages": [
+        "api-reference/models/channel",
+        "api-reference/models/token",
+        "api-reference/models/responses"
+      ]
+    }
+  ],
+  "api": {
+    "baseUrl": "https://prod.api.sauron.outlight.fun"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
+  }
+}

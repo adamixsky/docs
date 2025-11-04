@@ -1,0 +1,265 @@
+---
+title: 'Most Called Tokens'
+api: 'GET /api/tokens/most-called'
+description: 'Get tokens ranked by number of unique channels that called them'
+---
+
+## Overview
+
+Retrieve tokens ranked by the number of unique channels that mentioned them within a specific timeframe. This endpoint helps identify trending tokens across multiple channels.
+
+## Request
+
+<ParamField query="timeframe" type="string" required>
+  Time window for aggregation:
+  - `1h` - Last hour
+  - `24h` - Last 24 hours
+  - `7d` - Last 7 days
+  - `30d` - Last 30 days
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number (starting from 1)
+</ParamField>
+
+<ParamField query="limit" type="integer" default="15">
+  Number of results per page (max: 200)
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Array of most called token objects
+  
+  <Expandable title="Most Called Token Object">
+    <ResponseField name="address" type="string">
+      Token contract address
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      Token name
+    </ResponseField>
+    
+    <ResponseField name="symbol" type="string">
+      Token symbol
+    </ResponseField>
+    
+    <ResponseField name="logo_url" type="string">
+      URL to token logo
+    </ResponseField>
+    
+    <ResponseField name="chain" type="string">
+      Blockchain network
+    </ResponseField>
+    
+    <ResponseField name="current_fdv" type="string">
+      Current fully diluted valuation
+    </ResponseField>
+    
+    <ResponseField name="ath" type="string">
+      All-time high FDV value
+    </ResponseField>
+    
+    <ResponseField name="total_calls" type="integer">
+      Total number of calls within timeframe
+    </ResponseField>
+    
+    <ResponseField name="unique_channels" type="integer">
+      Number of unique channels that called this token
+    </ResponseField>
+    
+    <ResponseField name="total_subscribers" type="integer">
+      Combined subscriber count
+    </ResponseField>
+    
+    <ResponseField name="last_call_at" type="string">
+      ISO 8601 timestamp of last call
+    </ResponseField>
+    
+    <ResponseField name="channel_calls" type="array">
+      Details of calls from each channel
+      
+      <Expandable title="Channel Call Detail">
+        <ResponseField name="channel_id" type="string">
+          Channel identifier
+        </ResponseField>
+        
+        <ResponseField name="channel_name" type="string">
+          Channel display name
+        </ResponseField>
+        
+        <ResponseField name="subscriber_count" type="integer">
+          Channel subscriber count
+        </ResponseField>
+        
+        <ResponseField name="call_count" type="integer">
+          Number of times this channel called the token
+        </ResponseField>
+        
+        <ResponseField name="first_call" type="string">
+          First call timestamp
+        </ResponseField>
+        
+        <ResponseField name="last_call" type="string">
+          Last call timestamp
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="timeframe" type="string">
+  Applied timeframe filter
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Current page number
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Results per page
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of results
+</ResponseField>
+
+<ResponseField name="total_pages" type="integer">
+  Total number of pages
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/most-called?timeframe=24h&page=1&limit=10"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://prod.api.sauron.outlight.fun/api/tokens/most-called",
+    params={
+        "timeframe": "24h",
+        "page": 1,
+        "limit": 10
+    }
+)
+
+data = response.json()
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  timeframe: '24h',
+  page: 1,
+  limit: 10
+});
+
+const response = await fetch(
+  `https://prod.api.sauron.outlight.fun/api/tokens/most-called?${params}`
+);
+
+const data = await response.json();
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "data": [
+    {
+      "address": "0xabc123def456789012345678901234567890abcd",
+      "name": "Viral Token",
+      "symbol": "VIRAL",
+      "logo_url": "https://example.com/viral-logo.png",
+      "chain": "solana",
+      "current_fdv": "25000000",
+      "ath": "35000000",
+      "total_calls": 45,
+      "unique_channels": 23,
+      "total_subscribers": 2500000,
+      "last_call_at": "2025-01-15T17:30:00Z",
+      "channel_calls": [
+        {
+          "channel_id": "@TopCrypto",
+          "channel_name": "Top Crypto",
+          "subscriber_count": 250000,
+          "call_count": 3,
+          "first_call": "2025-01-14T08:00:00Z",
+          "last_call": "2025-01-15T17:30:00Z"
+        },
+        {
+          "channel_id": "@CryptoWhale",
+          "channel_name": "Crypto Whale",
+          "subscriber_count": 180000,
+          "call_count": 2,
+          "first_call": "2025-01-14T10:15:00Z",
+          "last_call": "2025-01-15T14:20:00Z"
+        }
+      ],
+      "website": "https://viraltoken.io",
+      "telegram_link": "https://t.me/viraltoken",
+      "twitter_link": "https://twitter.com/viraltoken"
+    },
+    {
+      "address": "0xdef789abc123456789012345678901234567890ef",
+      "name": "Trending Coin",
+      "symbol": "TREND",
+      "logo_url": "https://example.com/trend-logo.png",
+      "chain": "bsc",
+      "current_fdv": "18000000",
+      "ath": "22000000",
+      "total_calls": 38,
+      "unique_channels": 19,
+      "total_subscribers": 1800000,
+      "last_call_at": "2025-01-15T16:45:00Z",
+      "channel_calls": [
+        {
+          "channel_id": "@BSCAlpha",
+          "channel_name": "BSC Alpha",
+          "subscriber_count": 150000,
+          "call_count": 2,
+          "first_call": "2025-01-14T12:00:00Z",
+          "last_call": "2025-01-15T16:45:00Z"
+        }
+      ],
+      "website": "https://trendingcoin.org",
+      "telegram_link": "https://t.me/trendingcoin",
+      "twitter_link": "https://twitter.com/trendcoin"
+    }
+  ],
+  "timeframe": "24h",
+  "page": 1,
+  "limit": 10,
+  "total": 150,
+  "total_pages": 15
+}
+```
+
+## Timeframe Options
+
+| Timeframe | Description | Use Case |
+|-----------|-------------|----------|
+| `1h` | Last hour | Real-time trending tokens |
+| `24h` | Last 24 hours | Daily trending analysis |
+| `7d` | Last 7 days | Weekly performance review |
+| `30d` | Last 30 days | Monthly trend analysis |
+
+## Ranking Methodology
+
+Tokens are ranked by:
+1. **Primary**: Number of unique channels that called the token
+2. **Secondary**: Total number of calls
+3. **Tertiary**: Combined subscriber count of calling channels
+
+## Notes
+
+- This endpoint is ideal for identifying trending tokens across the ecosystem
+- The `unique_channels` metric helps filter out tokens that are only promoted by a single channel
+- Results are updated in real-time as new calls are made
+- Higher `unique_channels` count typically indicates broader market interest

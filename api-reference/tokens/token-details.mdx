@@ -1,0 +1,277 @@
+---
+title: 'Token Details'
+api: 'GET /api/tokens/{address}'
+description: 'Get comprehensive information about a specific token'
+---
+
+## Overview
+
+Retrieve detailed information about a specific token including price data, holder statistics, and all channel calls.
+
+## Request
+
+<ParamField path="address" type="string" required>
+  Token contract address
+</ParamField>
+
+## Response
+
+<ResponseField name="address" type="string">
+  Token contract address
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Token name
+</ResponseField>
+
+<ResponseField name="symbol" type="string">
+  Token symbol
+</ResponseField>
+
+<ResponseField name="logo_url" type="string">
+  URL to token logo
+</ResponseField>
+
+<ResponseField name="chain" type="string">
+  Blockchain network
+</ResponseField>
+
+<ResponseField name="price" type="string">
+  Current token price
+</ResponseField>
+
+<ResponseField name="current_fdv" type="string">
+  Current fully diluted valuation
+</ResponseField>
+
+<ResponseField name="volume" type="string">
+  Trading volume
+</ResponseField>
+
+<ResponseField name="total_holders" type="integer">
+  Number of token holders
+</ResponseField>
+
+<ResponseField name="top_10_holders_percentage" type="number">
+  Percentage of supply held by top 10 holders
+</ResponseField>
+
+<ResponseField name="sufficient_liquidity" type="boolean">
+  Whether token has sufficient liquidity
+</ResponseField>
+
+<ResponseField name="unique_channels" type="integer">
+  Number of unique channels that called this token
+</ResponseField>
+
+<ResponseField name="total_subscribers" type="integer">
+  Combined subscriber count
+</ResponseField>
+
+<ResponseField name="call_count" type="integer">
+  Total number of calls
+</ResponseField>
+
+<ResponseField name="avg_gain" type="string">
+  Average gain across all calls
+</ResponseField>
+
+<ResponseField name="website" type="string">
+  Token website URL
+</ResponseField>
+
+<ResponseField name="telegram_link" type="string">
+  Telegram community link
+</ResponseField>
+
+<ResponseField name="twitter_link" type="string">
+  Twitter/X account link
+</ResponseField>
+
+<ResponseField name="channel_calls" type="array">
+  Detailed list of all channel calls
+  
+  <Expandable title="Channel Call Object">
+    <ResponseField name="channel_id" type="string">
+      Channel identifier
+    </ResponseField>
+    
+    <ResponseField name="channel_name" type="string">
+      Channel display name
+    </ResponseField>
+    
+    <ResponseField name="channel_link" type="string">
+      Link to channel
+    </ResponseField>
+    
+    <ResponseField name="subscriber_count" type="integer">
+      Channel subscriber count
+    </ResponseField>
+    
+    <ResponseField name="message_link" type="string">
+      Link to original call message
+    </ResponseField>
+    
+    <ResponseField name="called_at" type="string">
+      ISO 8601 timestamp of call
+    </ResponseField>
+    
+    <ResponseField name="fdv_at_call" type="string">
+      FDV at time of call
+    </ResponseField>
+    
+    <ResponseField name="current_gain" type="number">
+      Current gain percentage from call
+    </ResponseField>
+    
+    <ResponseField name="highest_gain" type="number">
+      Highest gain achieved from call
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/0x1234567890abcdef1234567890abcdef12345678"
+```
+
+```python Python
+import requests
+
+token_address = "0x1234567890abcdef1234567890abcdef12345678"
+response = requests.get(
+    f"https://prod.api.sauron.outlight.fun/api/tokens/{token_address}"
+)
+
+data = response.json()
+```
+
+```javascript JavaScript
+const tokenAddress = "0x1234567890abcdef1234567890abcdef12345678";
+const response = await fetch(
+  `https://prod.api.sauron.outlight.fun/api/tokens/${tokenAddress}`
+);
+
+const data = await response.json();
+```
+
+```typescript TypeScript
+interface TokenDetails {
+  address: string;
+  name: string;
+  symbol: string;
+  logo_url: string;
+  chain: string;
+  price: string;
+  current_fdv: string;
+  volume: string;
+  total_holders: number;
+  top_10_holders_percentage: number;
+  sufficient_liquidity: boolean;
+  unique_channels: number;
+  total_subscribers: number;
+  call_count: number;
+  avg_gain: string;
+  website?: string;
+  telegram_link?: string;
+  twitter_link?: string;
+  channel_calls: ChannelCall[];
+}
+
+const tokenAddress = "0x1234567890abcdef1234567890abcdef12345678";
+const response = await fetch(
+  `https://prod.api.sauron.outlight.fun/api/tokens/${tokenAddress}`
+);
+
+const data: TokenDetails = await response.json();
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "address": "0x1234567890abcdef1234567890abcdef12345678",
+  "name": "Moon Token",
+  "symbol": "MOON",
+  "logo_url": "https://example.com/moon-logo.png",
+  "chain": "solana",
+  "price": "0.0125",
+  "current_fdv": "12500000",
+  "volume": "2850000",
+  "total_holders": 8542,
+  "top_10_holders_percentage": 35.7,
+  "sufficient_liquidity": true,
+  "unique_channels": 15,
+  "total_subscribers": 850000,
+  "call_count": 42,
+  "avg_gain": "485.2",
+  "website": "https://moontoken.io",
+  "telegram_link": "https://t.me/moontoken",
+  "twitter_link": "https://twitter.com/moontoken",
+  "channel_calls": [
+    {
+      "channel_id": "@TopCrypto",
+      "channel_name": "Top Crypto",
+      "channel_link": "https://t.me/TopCrypto",
+      "subscriber_count": 250000,
+      "message_link": "https://t.me/TopCrypto/1234",
+      "called_at": "2025-01-10T08:30:00Z",
+      "fdv_at_call": "500000",
+      "current_gain": 2400,
+      "highest_gain": 2900
+    },
+    {
+      "channel_id": "@CryptoAlpha",
+      "channel_name": "Crypto Alpha",
+      "channel_link": "https://t.me/CryptoAlpha",
+      "subscriber_count": 180000,
+      "message_link": "https://t.me/CryptoAlpha/5678",
+      "called_at": "2025-01-10T09:15:00Z",
+      "fdv_at_call": "525000",
+      "current_gain": 2280,
+      "highest_gain": 2750
+    },
+    {
+      "channel_id": "@GemHunters",
+      "channel_name": "Gem Hunters",
+      "channel_link": "https://t.me/GemHunters",
+      "subscriber_count": 120000,
+      "message_link": "https://t.me/GemHunters/9012",
+      "called_at": "2025-01-10T10:45:00Z",
+      "fdv_at_call": "650000",
+      "current_gain": 1823,
+      "highest_gain": 2200
+    }
+  ]
+}
+```
+
+## Token Metrics Explained
+
+| Metric | Description |
+|--------|-------------|
+| `price` | Current price per token in USD |
+| `current_fdv` | Fully diluted valuation (price × total supply) |
+| `volume` | 24-hour trading volume in USD |
+| `total_holders` | Number of unique wallet addresses holding the token |
+| `top_10_holders_percentage` | Concentration of token supply in top 10 wallets |
+| `avg_gain` | Average percentage gain across all channel calls |
+
+## Holder Distribution
+
+The `top_10_holders_percentage` metric helps assess token distribution:
+- **< 30%**: Well distributed
+- **30-50%**: Moderate concentration
+- **> 50%**: High concentration (potential risk)
+
+## Notes
+
+- All price and FDV values are in USD
+- Gain percentages are calculated from the FDV at call time
+- The `channel_calls` array is sorted by call date (newest first)
+- Token must have been called at least once to appear in the system
