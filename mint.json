@@ -42,11 +42,6 @@
       "url": "https://prod.api.sauron.outlight.fun"
     },
     {
-      "name": "Community",
-      "icon": "discord",
-      "url": "https://discord.gg/outlight"
-    },
-    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://blog.outlight.fun"
