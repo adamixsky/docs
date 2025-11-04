@@ -1,0 +1,57 @@
+---
+title: Channels
+---
+
+# Channels Endpoints
+
+## 🔍 Search Channels
+
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/channels/search"
+  queryParameters={{
+    q: "string (optional)",
+    limit: "number (required)"
+  }}
+  responseExample={{
+    "channels": ["Channel"],
+    "count": 0
+  }}
+/>
+
+---
+
+## 📃 List Channels with Pagination
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/channels"
+  queryParameters={{
+    page: "number (optional)",
+    limit: "number (optional)",
+    timeframe: "string (optional)",
+    sort: "string (optional)",
+    order: "asc|desc (optional)"
+  }}
+  responseExample={{
+    "channels": ["Channel"],
+    "totalChannels": 0,
+    "totalPages": 0,
+    "currentPage": 1
+  }}
+/>
+
+---
+
+## 📊 Channel Details
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/channels/{channelId}/info"
+  pathParameters={{
+    channelId: "string (required)"
+  }}
+  responseExample={{
+    "id": "123",
+    "username": "@example",
+    "win_rate": "0.54"
+  }}
+/>
