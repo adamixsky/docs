@@ -35,18 +35,6 @@
       "url": "api-reference"
     }
   ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://prod.api.sauron.outlight.fun"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://blog.outlight.fun"
-    }
-  ],
   "navigation": [
     {
       "group": "Documentation",
