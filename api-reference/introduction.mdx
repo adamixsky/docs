@@ -1,28 +1,122 @@
 ---
-title: "Outlight API Documentation"
-description: "Example section for showcasing API endpoints"
+title: 'API Introduction'
+description: 'Overview of the Outlight API capabilities and structure'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete this section by removing the api-reference folder.
-</Note>
+## Overview
 
-## Welcome
+The Outlight API provides programmatic access to cryptocurrency token call data across social media channels. Track performance metrics, analyze channel statistics, and monitor token movements in real-time.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base Configuration
 
-<Card title="Plant Store Endpoints" icon="leaf" href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json">
-  View the OpenAPI specification file
-</Card>
+<ParamField body="base_url" type="string" required>
+  API Base URL: `https://prod.api.sauron.outlight.fun`
+</ParamField>
 
-## Authentication
+<ParamField body="version" type="string" required>
+  API Version: `1.0.0`
+</ParamField>
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+## Available Resources
+
+### 🔍 Channels API
+
+Track and analyze social media channels that make cryptocurrency calls:
+
+- **Search channels** - Find channels by keywords
+- **List channels** - Get paginated channel lists with metrics
+- **Channel details** - Retrieve comprehensive channel statistics
+- **Channel calls** - View tokens called by specific channels
+
+### 🪙 Tokens API
+
+Monitor and analyze token performance:
+
+- **Search tokens** - Find tokens by address, name, or symbol
+- **Recent tokens** - Get recently called tokens
+- **Most called tokens** - Discover trending tokens by call frequency
+- **Token details** - Access complete token information
+
+## Response Format
+
+All API endpoints return JSON responses with consistent structure:
+
+### Success Response
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "data": [...],
+  "count": 100,
+  "totalPages": 10,
+  "currentPage": 1
+}
 ```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human readable error message",
+    "details": {}
+  }
+}
+```
+
+## HTTP Status Codes
+
+| Status Code | Description |
+|------------|-------------|
+| 200 | Success - Request completed successfully |
+| 400 | Bad Request - Invalid parameters |
+| 404 | Not Found - Resource doesn't exist |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Internal Server Error |
+
+## Data Types
+
+### Dates and Times
+- All timestamps use ISO 8601 format
+- Example: `2025-10-08T12:00:00Z`
+
+### Numeric Values
+- Many numeric fields return as strings for precision
+- Examples: `fdv_at_call`, `current_gain`
+
+### Pagination
+- Most list endpoints support pagination
+- Use `page` and `limit` parameters
+- Pages start at 1
+
+## Supported Platforms
+
+The API tracks channels from:
+
+<CardGroup cols={2}>
+  <Card title="Telegram" icon="telegram">
+    Telegram channels and groups
+  </Card>
+  <Card title="Twitter/X" icon="x-twitter">
+    Twitter/X accounts
+  </Card>
+</CardGroup>
+
+## Rate Limits
+
+<Note>
+  Rate limits may apply to API endpoints. Monitor response headers for rate limit information.
+</Note>
+
+## Getting Started
+
+Ready to make your first API call? Check out our quickstart guide or explore specific endpoints:
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/introduction/quickstart">
+    Make your first API call
+  </Card>
+  <Card title="Search Channels" icon="search" href="/api-reference/channels/search-channels">
+    Find and analyze channels
+  </Card>
+</CardGroup>

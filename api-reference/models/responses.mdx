@@ -1,0 +1,317 @@
+---
+title: 'Response Models'
+description: 'Common response structures and error handling'
+---
+
+## Overview
+
+This page documents common response structures, pagination formats, and error handling patterns used across the Outlight API.
+
+## Standard Response Formats
+
+### Paginated List Response
+
+Used for endpoints that return lists of items with pagination support.
+
+```typescript
+interface PaginatedResponse<T> {
+  data?: T[];           // Some endpoints use 'data'
+  channels?: T[];       // Channel endpoints use 'channels'
+  calls?: T[];          // Call endpoints use 'calls'
+  
+  // Pagination metadata
+  totalPages: number;      // Total number of pages
+  currentPage: number;     // Current page number (1-based)
+  total?: number;          // Total number of items
+  totalChannels?: number;  // Total channels (channel endpoints)
+  totalCalls?: number;     // Total calls (call endpoints)
+  count?: number;          // Items in current response
+  
+  // Request context
+  page?: number;           // Requested page
+  limit?: number;          // Items per page
+  timeframe?: string;      // Applied timeframe filter
+}
+```
+
+### Search Response
+
+Response format for search endpoints.
+
+```typescript
+interface SearchResponse<T> {
+  results?: T[];     // Some endpoints return results array
+  channels?: T[];    // Channel search returns channels
+  tokens?: T[];      // Token search may return tokens
+  count: number;     // Number of results found
+}
+```
+
+### Single Item Response
+
+For endpoints returning a single resource.
+
+```typescript
+// Direct object response - no wrapper
+// Example: GET /api/channels/{channelId}/info
+type SingleItemResponse = Channel | Token | ChannelInfo | TokenResponse;
+```
+
+## Pagination
+
+### Request Parameters
+
+```typescript
+interface PaginationParams {
+  page?: number;    // Page number (starts at 1)
+  limit?: number;   // Items per page (varies by endpoint)
+}
+```
+
+### Pagination Limits by Endpoint
+
+| Endpoint | Default Limit | Max Limit |
+|----------|--------------|-----------|
+| `/api/channels` | 20 | 200 |
+| `/api/channels/{id}/calls` | 20 | 500 |
+| `/api/tokens/recent` | 10 | 100 |
+| `/api/tokens/most-called` | 15 | 200 |
+
+### Example Paginated Response
+
+```json
+{
+  "data": [
+    { "id": "1", "name": "Item 1" },
+    { "id": "2", "name": "Item 2" },
+    { "id": "3", "name": "Item 3" }
+  ],
+  "currentPage": 1,
+  "totalPages": 10,
+  "total": 100,
+  "page": 1,
+  "limit": 10
+}
+```
+
+## Error Responses
+
+### Error Response Structure
+
+```typescript
+interface ErrorResponse {
+  error: {
+    code: string;           // Machine-readable error code
+    message: string;        // Human-readable error message
+    details?: any;          // Additional error details (optional)
+    retry_after?: number;   // Seconds to wait before retry (rate limit)
+  }
+}
+```
+
+### Common Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `INVALID_PARAMETERS` | 400 | Request parameters are invalid or missing |
+| `RESOURCE_NOT_FOUND` | 404 | Requested resource doesn't exist |
+| `RATE_LIMITED` | 429 | Too many requests, rate limit exceeded |
+| `INTERNAL_ERROR` | 500 | Internal server error |
+| `SERVICE_UNAVAILABLE` | 503 | Service temporarily unavailable |
+
+### Error Response Examples
+
+#### 400 Bad Request
+```json
+{
+  "error": {
+    "code": "INVALID_PARAMETERS",
+    "message": "The 'limit' parameter must be between 1 and 200",
+    "details": {
+      "parameter": "limit",
+      "provided": 500,
+      "max": 200
+    }
+  }
+}
+```
+
+#### 404 Not Found
+```json
+{
+  "error": {
+    "code": "RESOURCE_NOT_FOUND",
+    "message": "Channel '@UnknownChannel' not found"
+  }
+}
+```
+
+#### 429 Rate Limited
+```json
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Rate limit exceeded. Please try again later.",
+    "retry_after": 60
+  }
+}
+```
+
+## HTTP Status Codes
+
+### Success Codes
+
+| Status | Description | Usage |
+|--------|-------------|-------|
+| 200 | OK | Successful GET request |
+| 201 | Created | Resource successfully created |
+| 204 | No Content | Successful request with no response body |
+
+### Client Error Codes
+
+| Status | Description | Common Causes |
+|--------|-------------|---------------|
+| 400 | Bad Request | Invalid parameters, malformed request |
+| 401 | Unauthorized | Missing or invalid authentication (future) |
+| 403 | Forbidden | Access denied to resource |
+| 404 | Not Found | Resource doesn't exist |
+| 422 | Unprocessable Entity | Valid request but semantic errors |
+| 429 | Too Many Requests | Rate limit exceeded |
+
+### Server Error Codes
+
+| Status | Description | Action |
+|--------|-------------|--------|
+| 500 | Internal Server Error | Retry with exponential backoff |
+| 502 | Bad Gateway | Temporary issue, retry later |
+| 503 | Service Unavailable | Service down for maintenance |
+| 504 | Gateway Timeout | Request took too long, retry |
+
+## Response Headers
+
+### Standard Headers
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 1234
+Cache-Control: public, max-age=60
+ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"
+X-Request-Id: 550e8400-e29b-41d4-a716-446655440000
+```
+
+### Rate Limit Headers
+
+```http
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1672531200
+```
+
+## Best Practices
+
+### 1. Always Check Response Status
+
+```javascript
+const response = await fetch(url);
+
+if (!response.ok) {
+  const error = await response.json();
+  throw new Error(error.error.message);
+}
+
+const data = await response.json();
+```
+
+### 2. Handle Pagination Properly
+
+```python
+def fetch_all_pages(endpoint, params={}):
+    """Fetch all pages of paginated data"""
+    all_data = []
+    page = 1
+    
+    while True:
+        params['page'] = page
+        response = requests.get(endpoint, params=params)
+        data = response.json()
+        
+        all_data.extend(data.get('data', []))
+        
+        if page >= data['totalPages']:
+            break
+            
+        page += 1
+    
+    return all_data
+```
+
+### 3. Implement Retry Logic
+
+```typescript
+async function fetchWithRetry(
+  url: string, 
+  options: RequestInit = {}, 
+  maxRetries: number = 3
+): Promise<Response> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (response.status === 429) {
+        const retryAfter = parseInt(
+          response.headers.get('Retry-After') || '60'
+        );
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+      
+      return response;
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      
+      // Exponential backoff
+      await new Promise(resolve => 
+        setTimeout(resolve, Math.pow(2, i) * 1000)
+      );
+    }
+  }
+  
+  throw new Error('Max retries exceeded');
+}
+```
+
+### 4. Parse Response Carefully
+
+```python
+def safe_parse_response(response):
+    """Safely parse API response"""
+    try:
+        data = response.json()
+        
+        # Check for error response
+        if 'error' in data:
+            raise APIError(
+                code=data['error']['code'],
+                message=data['error']['message']
+            )
+        
+        return data
+    except ValueError:
+        # Response is not JSON
+        raise APIError(
+            code='INVALID_RESPONSE',
+            message='Invalid response format'
+        )
+```
+
+## Response Time Guidelines
+
+Expected response times under normal conditions:
+
+| Endpoint Type | Expected Time | Max Time |
+|--------------|---------------|----------|
+| Search | < 200ms | 1s |
+| List (paginated) | < 300ms | 2s |
+| Single item | < 100ms | 500ms |
+| Complex aggregation | < 500ms | 3s |

@@ -1,0 +1,25 @@
+{
+  "name": "outlight-api-docs",
+  "version": "1.0.0",
+  "description": "Mintlify documentation for Outlight API",
+  "scripts": {
+    "dev": "mintlify dev",
+    "build": "mintlify build",
+    "deploy": "mintlify deploy",
+    "preview": "mintlify preview"
+  },
+  "keywords": [
+    "api",
+    "documentation",
+    "mintlify",
+    "outlight",
+    "cryptocurrency",
+    "tokens",
+    "channels"
+  ],
+  "author": "Outlight",
+  "license": "MIT",
+  "devDependencies": {
+    "mintlify": "^4.0.0"
+  }
+}

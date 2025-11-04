@@ -1,15 +1,113 @@
 ---
-title: Outlight API
+title: Outlight API Documentation
+description: 'Track and analyze cryptocurrency token calls across social media channels'
 ---
 
-# Outlight API Documentation
+# Welcome to Outlight API
 
-**Base URL:** `https://prod.api.sauron.outlight.fun`  
-**Version:** `1.0.0`
+<img
+  className="block dark:hidden rounded-lg"
+  src="/images/hero-light.png"
+  alt="Outlight API"
+/>
+<img
+  className="hidden dark:block rounded-lg"
+  src="/images/hero-dark.png"
+  alt="Outlight API"
+/>
 
-Outlight API umożliwia dostęp do danych kanałów i tokenów z platform Telegram i Twitter.
+## Start Building with Outlight API
 
-Dostępne kategorie:
-- [Channels](/channels)
-- [Tokens](/tokens)
-- [Data Models](/models)
+The Outlight API provides powerful tools for tracking and analyzing cryptocurrency token calls across various social media channels including Telegram and Twitter.
+
+<CardGroup cols={2}>
+  <Card
+    title="Quick Start"
+    icon="rocket"
+    href="/introduction/quickstart"
+  >
+    Get up and running with the API in under 5 minutes
+  </Card>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/introduction"
+  >
+    Explore all available endpoints and parameters
+  </Card>
+</CardGroup>
+
+## Core Features
+
+<CardGroup cols={3}>
+  <Card
+    title="Channel Analytics"
+    icon="chart-line"
+    href="/api-reference/channels/search-channels"
+  >
+    Track channel performance and win rates
+  </Card>
+  <Card
+    title="Token Tracking"
+    icon="coins"
+    href="/api-reference/tokens/search-tokens"
+  >
+    Monitor token calls and FDV changes
+  </Card>
+  <Card
+    title="Real-time Data"
+    icon="bolt"
+    href="/api-reference/introduction"
+  >
+    Access up-to-date market information
+  </Card>
+</CardGroup>
+
+## Popular Endpoints
+
+### Channels API
+- [Search Channels](/api-reference/channels/search-channels) - Find channels by keywords
+- [List Channels](/api-reference/channels/list-channels) - Get paginated channel lists
+- [Channel Details](/api-reference/channels/channel-details) - Comprehensive channel stats
+- [Channel Calls](/api-reference/channels/channel-calls) - View tokens called by channels
+
+### Tokens API  
+- [Search Tokens](/api-reference/tokens/search-tokens) - Find tokens by address or symbol
+- [Recent Tokens](/api-reference/tokens/recent-tokens) - Get recently called tokens
+- [Most Called Tokens](/api-reference/tokens/most-called-tokens) - Discover trending tokens
+- [Token Details](/api-reference/tokens/token-details) - Complete token information
+
+## Quick Example
+
+```bash
+curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=10"
+```
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card
+    title="Authentication"
+    icon="shield"
+    href="/api-reference/authentication"
+  >
+    Learn about API access and rate limits
+  </Card>
+  <Card
+    title="Data Models"
+    icon="database"
+    href="/api-reference/models/channel"
+  >
+    Understand response structures
+  </Card>
+</CardGroup>
+
+## API Information
+
+- **Base URL:** `https://prod.api.sauron.outlight.fun`
+- **Version:** 1.0.0
+- **Authentication:** Currently public access
+
+<Note>
+  This API is currently in public access mode. No authentication required.
+</Note>
