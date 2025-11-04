@@ -1,9 +1,36 @@
-# Outlight API
+---
+title: Outlight API
+---
 
-Base URL: `https://prod.api.sauron.outlight.fun`  
-Version: `1.0.0`
+# Outlight API Documentation
 
-## Sections
+Welcome to the **Outlight API** – a REST API providing analytics and data for Telegram and Twitter channels, as well as tokens they promote.
+
+**Base URL:** `https://prod.api.sauron.outlight.fun`  
+**Version:** `1.0.0`
+
+## Features
+- Search and analyze social media channels (Telegram, Twitter/X)
+- Track token mentions and performance
+- Access historical and statistical data
+
+## Resources
 - [Channels API](/api-reference/channels)
 - [Tokens API](/api-reference/tokens)
 - [Data Models](/models)
+
+---
+
+### Platforms
+Supported platforms:
+- `telegram`
+- `twitter`
+
+### Timeframes
+Supported values:
+`1h`, `24h`, `7d`, `30d`, `all`
+
+### Data formats
+- **Dates:** ISO 8601 (`2025-10-08T12:00:00Z`)
+- **Numbers:** returned as strings (for precision)
+- **Pagination:** standard `page` + `limit`

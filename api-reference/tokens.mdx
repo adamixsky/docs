@@ -1,4 +1,77 @@
 ---
-title: 'Get Plants'
-openapi: 'GET /plants'
+title: Tokens API
 ---
+
+# Tokens API
+
+## 🔍 Search Tokens
+Search tokens by address, name, or symbol.
+
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/tokens/search"
+  queryParameters={{
+    "q": "string (required)"
+  }}
+  responseExample={{
+    "address": "0x123...",
+    "name": "Outlight Token",
+    "symbol": "OLT"
+  }}
+/>
+
+---
+
+## 🕓 Recently Called Tokens
+Retrieve recently called tokens.
+
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/tokens/recent"
+  queryParameters={{
+    "page": "number (optional, default: 1)",
+    "limit": "number (optional)"
+  }}
+  responseExample={{
+    "data": ["RecentToken"],
+    "page": 1,
+    "limit": 10
+  }}
+/>
+
+---
+
+## 📈 Most Called Tokens
+Retrieve tokens ranked by number of channels that mentioned them.
+
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/tokens/most-called"
+  queryParameters={{
+    "timeframe": "string (required) e.g. 1h, 24h, 7d, 30d",
+    "page": "number (optional)",
+    "limit": "number (optional)"
+  }}
+  responseExample={{
+    "data": ["MostCalledToken"],
+    "timeframe": "1h"
+  }}
+/>
+
+---
+
+## 📊 Token Details
+Retrieve detailed information about a specific token.
+
+<APIPlayground
+  method="GET"
+  url="https://prod.api.sauron.outlight.fun/api/tokens/{address}"
+  pathParameters={{
+    "address": "string (required) - Token address"
+  }}
+  responseExample={{
+    "address": "0x123...",
+    "price": "0.0523",
+    "avg_gain": "12.3"
+  }}
+/>
