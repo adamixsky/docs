@@ -29,20 +29,12 @@ interface TokenSearchResult {
 }
 ```
 
-## RecentToken
+## DetailedTokenCall
 
-Detailed token information returned by the `GET /api/tokens/recent` endpoint.
+This is a detailed call object used within both `RecentToken` and `MostCalledToken` responses.
 
 ```typescript
-interface RecentToken extends TokenSearchResult {
-  chain: "solana" | "bsc";
-  ath: number;
-  most_recent_call: string;
-  channel_calls: RecentTokenChannelCall[];
-}
-
-// Detailed call object within a RecentToken
-interface RecentTokenChannelCall {
+interface DetailedTokenCall {
   id: number;
   channel_id: string;
   channel_name: string;
@@ -63,27 +55,43 @@ interface RecentTokenChannelCall {
 }
 ```
 
+## RecentToken
+
+Detailed token information returned by the `GET /api/tokens/recent` endpoint.
+
+```typescript
+interface RecentToken extends TokenSearchResult {
+  chain: "solana" | "bsc";
+  ath: number;
+  most_recent_call: string;
+  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+}
+```
+
 ## MostCalledToken
 
 Token information ranked by call frequency, returned by `GET /api/tokens/most-called`.
 
 ```typescript
-interface MostCalledToken extends TokenSearchResult {
+// This model has been completely rebuilt to match the API response.
+interface MostCalledToken {
+  address: string;
+  name: string;
+  symbol: string;
+  logo_url: string | null;
+  current_fdv: number;
+  website: string | null;
+  telegram_link: string | null;
+  twitter_link: string | null;
+  last_updated: string;
+  sufficient_liquidity: boolean;
   chain: string;
-  ath: string; // Note: This endpoint returns ATH as a string
-  total_calls: number;
+  unique_channels: number;
+  total_calls: string; // Note: API returns this as a string
   last_call_at: string;
-  channel_calls: MostCalledChannelCallDetail[];
-}
-
-// Breakdown of calls per channel within a MostCalledToken
-interface MostCalledChannelCallDetail {
-  channel_id: string;
-  channel_name: string;
-  subscriber_count: number;
-  call_count: number;
-  first_call: string;
-  last_call: string;
+  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+  total_subscribers: number;
+  ath: number;
 }
 ```
 
@@ -138,157 +146,3 @@ interface TokenDetailChannelCall {
   platform: string;
 }
 ```
-
-## Data Precision & Types
-
-Many numeric values can be very large or require high precision. Be aware of the following:
-
-- **String for Precision**: Fields like `current_fdv` in `TokenSearchResult` are returned as strings to avoid floating-point inaccuracies.
-- **Number for Calculation**: Fields like `price` or `avg_gain` in `TokenResponse` are often returned as standard numbers.
-- **Handling `null`**: Many fields (e.g., `volume`, `total_holders`) can be `null` if the data is not available. Always check for `null` before using these values.title: 'Token Models'
-description: 'Data structures for token-related API responses'
----
-
-## Overview
-
-This page documents the data models used for token-related endpoints in the Outlight API.
-
-## TokenSearchResult
-
-Basic token information returned by the `GET /api/tokens/search` endpoint.
-
-```typescript
-interface TokenSearchResult {
-  address: string;
-  name: string;
-  symbol: string;
-  logo_url: string | null;
-  current_fdv: string;
-  sufficient_liquidity: boolean;
-  unique_channels: number;
-  total_subscribers: number;
-  call_count: string;
-  last_updated: string;
-  website?: string | null;
-  telegram_link?: string | null;
-  twitter_link?: string | null;
-}
-```
-
-## RecentToken
-
-Detailed token information returned by the `GET /api/tokens/recent` endpoint.
-
-```typescript
-interface RecentToken extends TokenSearchResult {
-  chain: "solana" | "bsc";
-  ath: number;
-  most_recent_call: string;
-  channel_calls: RecentTokenChannelCall[];
-}
-
-// Detailed call object within a RecentToken
-interface RecentTokenChannelCall {
-  id: number;
-  channel_id: string;
-  channel_name: string;
-  subscriber_count: number;
-  profile_photo_url: string;
-  channel_link: string;
-  message_id: number;
-  message_link: string;
-  fdv_at_call: number;
-  highest_fdv: number;
-  lowest_fdv: number;
-  highest_fdv_at: string;
-  lowest_fdv_at: string;
-  called_at: string;
-  win_rate: number;
-  avg_gain: number;
-  platform: string;
-}
-```
-
-## MostCalledToken
-
-Token information ranked by call frequency, returned by `GET /api/tokens/most-called`.
-
-```typescript
-interface MostCalledToken extends TokenSearchResult {
-  chain: string;
-  ath: string; // Note: This endpoint returns ATH as a string
-  total_calls: number;
-  last_call_at: string;
-  channel_calls: MostCalledChannelCallDetail[];
-}
-
-// Breakdown of calls per channel within a MostCalledToken
-interface MostCalledChannelCallDetail {
-  channel_id: string;
-  channel_name: string;
-  subscriber_count: number;
-  call_count: number;
-  first_call: string;
-  last_call: string;
-}
-```
-
-## TokenResponse
-
-Complete information for a single token, returned by `GET /api/tokens/{address}`.
-
-```typescript
-interface TokenResponse {
-  address: string;
-  name: string;
-  symbol: string;
-  logo_url: string | null;
-  website: string | null;
-  telegram_link: string | null;
-  twitter_link: string | null;
-  price: number | null;
-  current_fdv: number | null;
-  ath: number | null;
-  volume: number | null;
-  sufficient_liquidity: boolean;
-  total_holders: number | null;
-  top_10_holders_percentage: number | null;
-  unique_channels: number;
-  total_subscribers: number;
-  avg_gain: number | null;
-  last_updated: string;
-  channel_calls: TokenDetailChannelCall[];
-}
-
-// Detailed structure of a call inside a TokenResponse object
-interface TokenDetailChannelCall {
-  id: number;
-  channel_id: string;
-  channel_name: string;
-  subscriber_count: number;
-  profile_photo_url: string;
-  channel_link: string;
-  message_id: string;
-  message_link: string;
-  message_content: string;
-  message_html: string;
-  fdv_at_call: number;
-  highest_fdv: number;
-  lowest_fdv: number;
-  highest_fdv_at: string;
-  lowest_fdv_at: string;
-  called_at: string;
-  win_rate: number;
-  total_calls: number;
-  avg_gain: number;
-  platform: string;
-}
-```
-
-## Data Precision & Types
-
-Many numeric values can be very large or require high precision. Be aware of the following:
-
-- **String for Precision**: Fields like `current_fdv` in `TokenSearchResult` are returned as strings to avoid floating-point inaccuracies.
-- **Number for Calculation**: Fields like `price` or `avg_gain` in `TokenResponse` are often returned as standard numbers.
-- **Handling `null`**: Many fields (e.g., `volume`, `total_holders`) can be `null` if the data is not available. Always check for `null` before using these values.
