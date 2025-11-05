@@ -16,7 +16,7 @@
     }
   },
   "modeToggle": {
-    "default": "dark"
+    "defaultValue": "dark"
   },
   "topbarLinks": [
     {
@@ -70,14 +70,6 @@
         "api-reference/tokens/recent-tokens",
         "api-reference/tokens/most-called-tokens",
         "api-reference/tokens/token-details"
-      ]
-    },
-    {
-      "group": "Data Models",
-      "pages": [
-        "api-reference/models/channel",
-        "api-reference/models/token",
-        "api-reference/models/responses"
       ]
     }
   ],
