@@ -52,81 +52,85 @@ Retrieve comprehensive information about a specific channel including detailed s
   Total calls in the last 24 hours
 </ResponseField>
 
-<ResponseField name="total_calls_3d" type="integer">
+ <ResponseField name="total_calls_3d" type="integer">
   Total calls in the last 3 days
 </ResponseField>
 
-<ResponseField name="total_calls_7d" type="integer">
+ <ResponseField name="total_calls_7d" type="integer">
   Total calls in the last 7 days
 </ResponseField>
 
-<ResponseField name="total_calls_14d" type="integer">
+ <ResponseField name="total_calls_14d" type="integer">
   Total calls in the last 14 days
 </ResponseField>
 
-<ResponseField name="total_calls_30d" type="integer">
+ <ResponseField name="total_calls_30d" type="integer">
   Total calls in the last 30 days
 </ResponseField>
 
-<ResponseField name="total_calls_all" type="integer">
+ <ResponseField name="total_calls_all" type="integer">
   Total calls of all time
 </ResponseField>
+
 
 <ResponseField name="win_rate_1d" type="number">
   Win rate for the last 24 hours
 </ResponseField>
 
-<ResponseField name="win_rate_3d" type="number">
+ <ResponseField name="win_rate_3d" type="number">
   Win rate for the last 3 days
 </ResponseField>
 
-<ResponseField name="win_rate_7d" type="number">
+ <ResponseField name="win_rate_7d" type="number">
   Win rate for the last 7 days
 </ResponseField>
 
-<ResponseField name="win_rate_14d" type="number">
+ <ResponseField name="win_rate_14d" type="number">
   Win rate for the last 14 days
 </ResponseField>
 
-<ResponseField name="win_rate_30d" type="number">
+ <ResponseField name="win_rate_30d" type="number">
   Win rate for the last 30 days
 </ResponseField>
 
-<ResponseField name="win_rate_all" type="number">
+ <ResponseField name="win_rate_all" type="number">
   Win rate for all time
 </ResponseField>
+
 
 <ResponseField name="avg_gain_1d" type="number">
   Average gain for the last 24 hours
 </ResponseField>
 
-<ResponseField name="avg_gain_3d" type="number">
+ <ResponseField name="avg_gain_3d" type="number">
   Average gain for the last 3 days
 </ResponseField>
 
-<ResponseField name="avg_gain_7d" type="number">
+ <ResponseField name="avg_gain_7d" type="number">
   Average gain for the last 7 days
 </ResponseField>
 
-<ResponseField name="avg_gain_14d" type="number">
+ <ResponseField name="avg_gain_14d" type="number">
   Average gain for the last 14 days
 </ResponseField>
 
-<ResponseField name="avg_gain_30d" type="number">
+ <ResponseField name="avg_gain_30d" type="number">
   Average gain for the last 30 days
 </ResponseField>
 
-<ResponseField name="avg_gain_all" type="number">
+ <ResponseField name="avg_gain_all" type="number">
   Average gain for all time
 </ResponseField>
+
 
 <ResponseField name="x5_rate_all" type="number">
   Percentage of calls achieving 5x returns (all time)
 </ResponseField>
 
-<ResponseField name="x10_rate_all" type="number">
+ <ResponseField name="x10_rate_all" type="number">
   Percentage of calls achieving 10x returns (all time)
 </ResponseField>
+
 
 <ResponseField name="unique_tokens" type="integer">
   Number of unique tokens called
@@ -176,9 +180,12 @@ Retrieve comprehensive information about a specific channel including detailed s
 
 <CodeGroup>
 
-```````bash cURL
+```bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@AltcoinGordon/info"
-``````python Python
+```
+
+
+```python Python
 import requests
 
 channel_id = "@AltcoinGordon"
@@ -187,20 +194,23 @@ response = requests.get(
 )
 
 data = response.json()
-``````javascript JavaScript
+```
+
+
+```javascript JavaScript
 const channelId = "@AltcoinGordon";
 const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/channels/${channelId}/info`
 );
 
 const data = await response.json();
-```````
+```
 
 </CodeGroup>
 
 ## Example Response
 
-````json
+```json
 {
   "channel_id": "@AltcoinGordon",
   "username": "AltcoinGordon",
@@ -240,20 +250,20 @@ const data = await response.json();
   "intelligent_sl": null,
   "rds_score": null,
   "status": "pending"
-}```
+}
+```
 
 ## Metrics Explained
 
-| Metric | Description |
-|--------|-------------|
-| `win_rate` | Percentage of profitable calls |
-| `avg_gain` | Average percentage gain across calls |
-| `x5_rate` | Percentage achieving 5x returns |
-| `x10_rate` | Percentage achieving 10x returns |
-| `intelligent_sl` | Suggested stop-loss percentage |
-| `intelligent_tp` | Suggested take-profit percentage |
-| `profit_risk_ratio` | Ratio of potential profit to risk |
-| `rds_score` | Overall channel performance score |
-| `survival_rate_percent` | Token survival rate |
-| `time_to_ath_minutes` | Average time to peak value |
-````
+| Metric                  | Description                          |
+| ----------------------- | ------------------------------------ |
+| `win_rate`              | Percentage of profitable calls       |
+| `avg_gain`              | Average percentage gain across calls |
+| `x5_rate`               | Percentage achieving 5x returns      |
+| `x10_rate`              | Percentage achieving 10x returns     |
+| `intelligent_sl`        | Suggested stop-loss percentage       |
+| `intelligent_tp`        | Suggested take-profit percentage     |
+| `profit_risk_ratio`     | Ratio of potential profit to risk    |
+| `rds_score`             | Overall channel performance score    |
+| `survival_rate_percent` | Token survival rate                  |
+| `time_to_ath_minutes`   | Average time to peak value           |
