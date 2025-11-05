@@ -17,7 +17,7 @@
     "tokens",
     "channels"
   ],
-  "author": "Outlight",
+  "author": "Outlight.fun",
   "license": "MIT",
   "devDependencies": {
     "mintlify": "^4.0.0"
