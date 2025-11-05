@@ -1,7 +1,7 @@
 ---
-title: 'Most Called Tokens'
-api: 'GET /api/tokens/most-called'
-description: 'Get tokens ranked by number of unique channels that called them'
+title: "Most Called Tokens"
+api: "GET /api/tokens/most-called"
+description: "Get tokens ranked by number of unique channels that called them"
 ---
 
 ## Overview
@@ -14,11 +14,11 @@ Retrieve tokens ranked by the number of unique channels that mentioned them with
   Time window for aggregation: `1h`, `24h`, `7d`, or `30d`.
 </ParamField>
 
-<ParamField query="page" type="integer" default="1">
+<ParamField query="page" default="1" type="integer">
   Page number (starting from 1).
 </ParamField>
 
-<ParamField query="limit" type="integer" default="15">
+<ParamField query="limit" default="15" type="integer">
   Number of results per page (max: 200).
 </ParamField>
 
@@ -51,7 +51,8 @@ Retrieve tokens ranked by the number of unique channels that mentioned them with
 ## Example Request
 
 <CodeGroup>
-```bash cURL
+
+```````bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/most-called?timeframe=24h&page=1&limit=10"
 ``````python Python
 import requests
@@ -76,52 +77,62 @@ const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/tokens/most-called?${params}`
 );
 const data = await response.json();
-```
+```````
+
 </CodeGroup>
 
 ## Example Response
 
-*For a detailed breakdown of the object structure in the `data` array, see the [MostCalledToken model](/api-reference/models/token-models#mostcalledtoken).*
+[_`For a detailed breakdown of the object structure in the data array, see the MostCalledToken model.`_](/api-reference/models/token-models#mostcalledtoken)
+
 ```json
 {
   "data": [
     {
-      "address": "0xabc123def456789012345678901234567890abcd",
-      "name": "Viral Token",
-      "symbol": "VIRAL",
+      "address": "ADMiFUmFUz3tzLozh7yTy2zWe1soM61aE995TZqLpump",
+      "name": "Engrave Protocol",
+      "symbol": "Engrave",
+      "logo_url": "https://ipfs.io/ipfs/bafkreifo73fkzi4tnsjzkpwgybw63a3v3tz4gc3z4li54ugzf6tfhon52e",
+      "current_fdv": 89006.39,
+      "website": null,
+      "telegram_link": null,
+      "twitter_link": null,
+      "last_updated": "2025-11-05T20:34:42.167Z",
+      "sufficient_liquidity": true,
       "chain": "solana",
-      "ath": "35000000",
-      "total_calls": 45,
-      "unique_channels": 23,
-      "last_call_at": "2025-01-15T17:30:00Z",
+      "unique_channels": 7,
+      "total_calls": "7",
+      "last_call_at": "2025-11-05T20:09:18.000Z",
       "channel_calls": [
         {
-          "channel_id": "@TopCrypto",
-          "channel_name": "Top Crypto",
-          "subscriber_count": 250000,
-          "call_count": 3,
-          "first_call": "2025-01-14T08:00:00Z",
-          "last_call": "2025-01-15T17:30:00Z"
+          "id": 3593187,
+          "channel_id": "@owd_official",
+          "channel_name": "onWealth Detector",
+          "subscriber_count": 1310,
+          "called_at": "2025-11-05T20:09:18.000Z",
+          "platform": "telegram"
         }
-      ]
+      ],
+      "total_subscribers": 23950,
+      "ath": 180232.18
     }
   ],
-  "timeframe": "24h",
+  "timeframe": "1h",
   "page": 1,
-  "limit": 10,
-  "total": 150,
-  "total_pages": 15
+  "limit": 15,
+  "total": 55,
+  "total_pages": 4
 }
 ```
 
 ## Timeframe Options
 
-| Timeframe | Description | Use Case |
-|-----------|-------------|----------|
-| `1h` | Last hour | Real-time trending tokens |
-| `24h` | Last 24 hours | Daily trending analysis |
-| `7d` | Last 7 days | Weekly performance review |
-| `30d` | Last 30 days | Monthly trend analysis |
+| Timeframe | Description   | Use Case                  |
+| --------- | ------------- | ------------------------- |
+| `1h`      | Last hour     | Real-time trending tokens |
+| `24h`     | Last 24 hours | Daily trending analysis   |
+| `7d`      | Last 7 days   | Weekly performance review |
+| `30d`     | Last 30 days  | Monthly trend analysis    |
 
 ## Ranking Methodology
 

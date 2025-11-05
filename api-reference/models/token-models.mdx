@@ -42,7 +42,7 @@ interface DetailedTokenCall {
   subscriber_count: number;
   profile_photo_url: string;
   channel_link: string;
-  message_id: number;
+  message_id: string; // Corrected: Standardized to string
   message_link: string;
   fdv_at_call: number;
   highest_fdv: number;
@@ -62,10 +62,9 @@ Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 
 ```typescript
 interface RecentToken extends TokenSearchResult {
-  // It inherits 'chain' from TokenSearchResult
   ath: number;
   most_recent_call: string;
-  channel_calls: DetailedTokenCall[];
+  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
 }
 ```
 
@@ -89,9 +88,9 @@ interface MostCalledToken {
   unique_channels: number;
   total_calls: string;
   last_call_at: string;
-  channel_calls: DetailedTokenCall[];
+  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
   total_subscribers: number;
-  ath: number;
+  ath: number; // Corrected: Matched to API response type
 }
 ```
 

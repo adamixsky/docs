@@ -1,7 +1,7 @@
 ---
-title: 'Search Tokens'
-api: 'GET /api/tokens/search'
-description: 'Search for tokens by address, name, or symbol'
+title: "Search Tokens"
+api: "GET /api/tokens/search"
+description: "Search for tokens by address, name, or symbol"
 ---
 
 ## Overview
@@ -21,7 +21,8 @@ The endpoint returns a **direct JSON array** of [TokenSearchResult](/api-referen
 ## Example Request
 
 <CodeGroup>
-```bash cURL
+
+```````bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/search?q=SOL"
 ``````python Python
 import requests
@@ -36,25 +37,31 @@ const response = await fetch(
   "https://prod.api.sauron.outlight.fun/api/tokens/search?q=SOL"
 );
 const data = await response.json(); // data will be an array of objects
-```
+```````
+
 </CodeGroup>
 
 ## Example Response
 
-*For a detailed breakdown of the object structure, see the [TokenSearchResult model](/api-reference/models/token-models#tokensearchresult).*
+[_For a detailed breakdown of the object structure, see the TokenSearchResult model._](/api-reference/models/token-models#tokensearchresult)
+
 ```json
 [
   {
-    "address": "So11111111111111111111111111111111111111112",
-    "name": "Wrapped SOL",
-    "symbol": "SOL",
-    "logo_url": "https://dd.dexscreener.com/ds-data/tokens/solana/So11111111111111111111111111111111111111112.png?key=525a21",
-    "current_fdv": "83030282471.9161",
+    "address": "BDeCrG5CvqihNeYWMp9WnkrvcKVVp8uz7DiLx19Bpump",
+    "name": "Privacy Cult",
+    "symbol": "Privacy",
+    "logo_url": "https://image.solanatracker.io/proxy?url=...",
+    "current_fdv": 15656.82,
+    "website": null,
+    "telegram_link": null,
+    "twitter_link": null,
+    "last_updated": "2025-11-05T20:39:45.411Z",
     "sufficient_liquidity": true,
-    "unique_channels": 453,
-    "total_subscribers": 1496660,
-    "call_count": "806",
-    "last_updated": "2025-11-06T12:00:00.000Z"
+    "chain": "solana",
+    "unique_channels": 2,
+    "total_subscribers": 2810,
+    "call_count": "2"
   }
 ]
 ```
