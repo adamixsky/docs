@@ -176,6 +176,10 @@ description: 'What this endpoint does'
 3. Make your changes
 4. Submit a pull request
 
+## 📝 License
+
+This documentation is provided for the Outlight API.
+
 ## 🔗 Links
 
 - [API Base URL](https://prod.api.sauron.outlight.fun)
