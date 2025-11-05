@@ -1,6 +1,5 @@
 ---
 title: 'Channel Details'
-api: 'GET /api/channels/{channelId}/info'
 description: 'Get detailed information and statistics for a specific channel'
 ---
 
@@ -10,118 +9,61 @@ Retrieve comprehensive information about a specific channel including detailed s
 
 ## Request
 
-<ParamField path="channelId" type="string" required>
-  Unique channel identifier (e.g., "@ExampleChannel")
-</ParamField>
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| channelId | string | yes | Unique channel identifier (e.g., "@ExampleChannel") |
 
 ## Response
 
-<ResponseField name="channel_id" type="string">
-  Unique identifier for the channel
-</ResponseField>
-
-<ResponseField name="username" type="string">
-  Channel username
-</ResponseField>
-
-<ResponseField name="name" type="string">
-  Display name of the channel
-</ResponseField>
-
-<ResponseField name="link" type="string">
-  URL to the channel
-</ResponseField>
-
-<ResponseField name="profile_photo_url" type="string">
-  URL to the channel's profile picture
-</ResponseField>
-
-<ResponseField name="platform" type="string">
-  Platform: "telegram" or "twitter"
-</ResponseField>
-
-<ResponseField name="subscriber_count" type="integer">
-  Number of subscribers
-</ResponseField>
-
-<ResponseField name="calls_analyzed" type="integer">
-  Number of calls that have been fully analyzed
-</ResponseField>
-
-<ResponseField name="total_calls_1d" type="integer">Total calls in the last 24 hours</ResponseField>
-<ResponseField name="total_calls_3d" type="integer">Total calls in the last 3 days</ResponseField>
-<ResponseField name="total_calls_7d" type="integer">Total calls in the last 7 days</ResponseField>
-<ResponseField name="total_calls_14d" type="integer">Total calls in the last 14 days</ResponseField>
-<ResponseField name="total_calls_30d" type="integer">Total calls in the last 30 days</ResponseField>
-<ResponseField name="total_calls_all" type="integer">Total calls of all time</ResponseField>
-
-<ResponseField name="win_rate_1d" type="number">Win rate for the last 24 hours</ResponseField>
-<ResponseField name="win_rate_3d" type="number">Win rate for the last 3 days</ResponseField>
-<ResponseField name="win_rate_7d" type="number">Win rate for the last 7 days</ResponseField>
-<ResponseField name="win_rate_14d" type="number">Win rate for the last 14 days</ResponseField>
-<ResponseField name="win_rate_30d" type="number">Win rate for the last 30 days</ResponseField>
-<ResponseField name="win_rate_all" type="number">Win rate for all time</ResponseField>
-
-<ResponseField name="avg_gain_1d" type="number">Average gain for the last 24 hours</ResponseField>
-<ResponseField name="avg_gain_3d" type="number">Average gain for the last 3 days</ResponseField>
-<ResponseField name="avg_gain_7d" type="number">Average gain for the last 7 days</ResponseField>
-<ResponseField name="avg_gain_14d" type="number">Average gain for the last 14 days</ResponseField>
-<ResponseField name="avg_gain_30d" type="number">Average gain for the last 30 days</ResponseField>
-<ResponseField name="avg_gain_all" type="number">Average gain for all time</ResponseField>
-
-<ResponseField name="x5_rate_all" type="number">Percentage of calls achieving 5x returns (all time)</ResponseField>
-<ResponseField name="x10_rate_all" type="number">Percentage of calls achieving 10x returns (all time)</ResponseField>
-
-<ResponseField name="unique_tokens" type="integer">
-  Number of unique tokens called
-</ResponseField>
-
-<ResponseField name="last_call_at" type="string">
-  ISO 8601 timestamp of the most recent call
-</ResponseField>
-
-<ResponseField name="first_call_at" type="string">
-  ISO 8601 timestamp of the first call
-</ResponseField>
-
-<ResponseField name="intelligent_sl" type="number | null">
-  Intelligent stop-loss value
-</ResponseField>
-
-<ResponseField name="intelligent_tp" type="number | null">
-  Intelligent take-profit value
-</ResponseField>
-
-<ResponseField name="profit_risk_ratio" type="number | null">
-  Profit to risk ratio
-</ResponseField>
-
-<ResponseField name="rds_score" type="number | null">
-  RDS (Risk-Diversification-Success) score
-</ResponseField>
-
-<ResponseField name="survival_rate_percent" type="number | null">
-  Percentage of tokens that maintained value
-</ResponseField>
-
-<ResponseField name="time_to_ath_minutes" type="number | null">
-  Average time to reach all-time high in minutes
-</ResponseField>
-
-<ResponseField name="status" type="string">
-  Analysis status of the channel (e.g., "pending")
-</ResponseField>
-
-<ResponseField name="updated_at" type="string | null">
-  ISO 8601 timestamp of the last data update
-</ResponseField>
+| Field | Type | Description |
+|-------|------|-------------|
+| channel_id | string | Unique identifier for the channel |
+| username | string | Channel username |
+| name | string | Display name of the channel |
+| link | string | URL to the channel |
+| profile_photo_url | string | URL to the channel's profile picture |
+| platform | string | Platform: "telegram" or "twitter" |
+| subscriber_count | integer | Number of subscribers |
+| calls_analyzed | integer | Number of calls that have been fully analyzed |
+| total_calls_1d | integer | Total calls in the last 24 hours |
+| total_calls_3d | integer | Total calls in the last 3 days |
+| total_calls_7d | integer | Total calls in the last 7 days |
+| total_calls_14d | integer | Total calls in the last 14 days |
+| total_calls_30d | integer | Total calls in the last 30 days |
+| total_calls_all | integer | Total calls of all time |
+| win_rate_1d | number | Win rate for the last 24 hours |
+| win_rate_3d | number | Win rate for the last 3 days |
+| win_rate_7d | number | Win rate for the last 7 days |
+| win_rate_14d | number | Win rate for the last 14 days |
+| win_rate_30d | number | Win rate for the last 30 days |
+| win_rate_all | number | Win rate for all time |
+| avg_gain_1d | number | Average gain for the last 24 hours |
+| avg_gain_3d | number | Average gain for the last 3 days |
+| avg_gain_7d | number | Average gain for the last 7 days |
+| avg_gain_14d | number | Average gain for the last 14 days |
+| avg_gain_30d | number | Average gain for the last 30 days |
+| avg_gain_all | number | Average gain for all time |
+| x5_rate_all | number | Percentage of calls achieving 5x returns (all time) |
+| x10_rate_all | number | Percentage of calls achieving 10x returns (all time) |
+| unique_tokens | integer | Number of unique tokens called |
+| last_call_at | string | ISO 8601 timestamp of the most recent call |
+| first_call_at | string | ISO 8601 timestamp of the first call |
+| intelligent_sl | number or null | Intelligent stop-loss value |
+| intelligent_tp | number or null | Intelligent take-profit value |
+| profit_risk_ratio | number or null | Profit to risk ratio |
+| rds_score | number or null | RDS (Risk-Diversification-Success) score |
+| survival_rate_percent | number or null | Percentage of tokens that maintained value |
+| time_to_ath_minutes | number or null | Average time to reach all-time high in minutes |
+| status | string | Analysis status of the channel (e.g., "pending") |
+| updated_at | string or null | ISO 8601 timestamp of the last data update |
 
 ## Example Request
 
-<CodeGroup>
-```bash cURL
+```bash
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@AltcoinGordon/info"
-``````python Python
+```
+
+```python
 import requests
 
 channel_id = "@AltcoinGordon"
@@ -130,13 +72,20 @@ response = requests.get(
 )
 
 data = response.json()
-``````javascript JavaScript
+```
+
+```javascript
 const channelId = "@AltcoinGordon";
 const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/channels/${channelId}/info`
 );
 
 const data = await response.json();
+```
+
+## Example Response
+
+```json
 {
   "channel_id": "@AltcoinGordon",
   "username": "AltcoinGordon",
@@ -177,15 +126,19 @@ const data = await response.json();
   "rds_score": null,
   "status": "pending"
 }
-Metrics Explained
-Metric	Description
-win_rate	Percentage of profitable calls
-avg_gain	Average percentage gain across calls
-x5_rate	Percentage achieving 5x returns
-x10_rate	Percentage achieving 10x returns
-intelligent_sl	Suggested stop-loss percentage
-intelligent_tp	Suggested take-profit percentage
-profit_risk_ratio	Ratio of potential profit to risk
-rds_score	Overall channel performance score
-survival_rate_percent	Token survival rate
-time_to_ath_minutes	Average time to peak value
+```
+
+## Metrics Explained
+
+| Metric | Description |
+|--------|-------------|
+| win_rate | Percentage of profitable calls |
+| avg_gain | Average percentage gain across calls |
+| x5_rate | Percentage achieving 5x returns |
+| x10_rate | Percentage achieving 10x returns |
+| intelligent_sl | Suggested stop-loss percentage |
+| intelligent_tp | Suggested take-profit percentage |
+| profit_risk_ratio | Ratio of potential profit to risk |
+| rds_score | Overall channel performance score |
+| survival_rate_percent | Token survival rate |
+| time_to_ath_minutes | Average time to peak value |
