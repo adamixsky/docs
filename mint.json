@@ -16,7 +16,7 @@
     }
   },
   "modeToggle": {
-    "defaultValue": "dark"
+    "default": "dark"
   },
   "topbarLinks": [
     {
