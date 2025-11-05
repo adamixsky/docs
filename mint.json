@@ -75,9 +75,9 @@
     {
       "group": "Data Models",
       "pages": [
-        "api-reference/models/channel",
-        "api-reference/models/token",
-        "api-reference/models/responses"
+        "api-reference/models/channel-models",
+        "api-reference/models/token-models",
+        "api-reference/models/responses-models"
       ]
     }
   ],
