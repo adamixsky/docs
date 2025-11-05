@@ -17,8 +17,9 @@ interface TokenSearchResult {
   name: string;
   symbol: string;
   logo_url: string | null;
-  current_fdv: string;
+  current_fdv: number; // Corrected: API returns this as a number
   sufficient_liquidity: boolean;
+  chain: string; // Corrected: Added missing field
   unique_channels: number;
   total_subscribers: number;
   call_count: string;
@@ -31,7 +32,7 @@ interface TokenSearchResult {
 
 ## DetailedTokenCall
 
-This is a detailed call object used within both `RecentToken` and `MostCalledToken` responses.
+This is a detailed call object used as a nested structure within both the `RecentToken` and `MostCalledToken` responses.
 
 ```typescript
 interface DetailedTokenCall {
@@ -61,10 +62,10 @@ Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 
 ```typescript
 interface RecentToken extends TokenSearchResult {
-  chain: "solana" | "bsc";
+  // It inherits 'chain' from TokenSearchResult
   ath: number;
   most_recent_call: string;
-  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+  channel_calls: DetailedTokenCall[];
 }
 ```
 
@@ -73,7 +74,6 @@ interface RecentToken extends TokenSearchResult {
 Token information ranked by call frequency, returned by `GET /api/tokens/most-called`.
 
 ```typescript
-// This model has been completely rebuilt to match the API response.
 interface MostCalledToken {
   address: string;
   name: string;
@@ -87,9 +87,9 @@ interface MostCalledToken {
   sufficient_liquidity: boolean;
   chain: string;
   unique_channels: number;
-  total_calls: string; // Note: API returns this as a string
+  total_calls: string;
   last_call_at: string;
-  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+  channel_calls: DetailedTokenCall[];
   total_subscribers: number;
   ath: number;
 }
