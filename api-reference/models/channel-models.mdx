@@ -13,47 +13,46 @@ Basic channel information object returned by `list` and `search` endpoints.
 
 ```typescript
 interface Channel {
-  channel_id: string;           // Unique identifier (e.g., "@ExampleChannel")
-  username: string;              // Channel username
-  name: string;                  // Display name
-  link: string;                  // Channel URL
-  subscriber_count: number;      // Number of subscribers
-  profile_photo_url: string;     // Profile picture URL
-  platform: "telegram" | "twitter"; // Platform
-  calls_analyzed: number;        // Number of analyzed calls
-  win_rate: string;              // Overall win rate percentage
-  avg_gain: string;              // Overall average gain percentage
-  total_calls_30d: number;       // Calls in last 30 days
-  win_rate_30d: string;          // 30-day win rate
-  avg_gain_30d: string;          // 30-day average gain
-  x5_rate: string;               // Overall rate of 5x returns
-  x10_rate: string;              // Overall rate of 10x returns
-  last_updated: string;          // ISO 8601 timestamp
-}```
-
-### Field Details
-
-| Field | Type | Description |
-|---|---|---|
-| `channel_id` | string | Unique identifier, typically starts with "@". |
-| `username` | string | Channel username without "@". |
-| `name` | string | Display name shown on the platform. |
-| `link` | string | Direct URL to the channel. |
-| `subscriber_count` | integer | Current number of subscribers or followers. |
-| `profile_photo_url` | string | URL to the channel's profile picture. |
-| `platform` | enum | The social media platform: "telegram" or "twitter". |
-| `calls_analyzed` | integer | Total number of token calls that have been analyzed. |
-| `win_rate` | string | Percentage of profitable calls (all time). |
-| `avg_gain` | string | Average percentage gain across all calls (all time). |
-| `total_calls_30d` | integer | Number of calls made in the last 30 days. |
-| `win_rate_30d` | string | Win rate for calls made in the last 30 days. |
-| `avg_gain_30d` | string | Average gain for calls made in the last 30 days. |
+  channel_id: string;
+  username: string;
+  name: string;
+  link: string;
+  subscriber_count: number;
+  profile_photo_url: string;
+  platform: "telegram" | "twitter";
+  calls_analyzed: number;
+  win_rate: string;
+  avg_gain: string;
+  total_calls_30d: number;
+  win_rate_30d: string;
+  avg_gain_30d: string;
+  x5_rate: string;
+  x10_rate: string;
+  last_updated: string;
+}
+```
 
 ## ChannelInfo
 
-Extended channel information returned by `GET /api/channels/{channelId}/info`. This model uses a flat structure for timeframe-specific metrics.
+Extended channel information returned by `GET /api/channels/{channelId}/info`. This response contains both a flat structure with basic metrics and a nested object with advanced analytics.
 
 ```typescript
+// Nested object for advanced, calculated analytics
+interface TimeframeAnalytics {
+  time_to_ath_minutes: number;
+  survival_rate_percent: number;
+  profit_risk_ratio: number | null;
+  average_gain_percent: number;
+  intelligent_tp: number;
+  intelligent_sl: number;
+  rds_score: number;
+  channel_style: string;
+  calculated_at: string;
+  updated_at: string;
+  timeframe_days: number;
+}
+
+// The main response object for the Channel Details endpoint
 interface ChannelInfo {
   // Basic Info
   channel_id: string;
@@ -65,40 +64,37 @@ interface ChannelInfo {
   subscriber_count: number;
   calls_analyzed: number;
 
-  // Timeframe Metrics
+  // Basic Timeframe Metrics (Flat Structure)
   total_calls_1d: number;
   win_rate_1d: number;
   avg_gain_1d: number;
-  total_calls_3d: number;
-  win_rate_3d: number;
-  avg_gain_3d: number;
-  total_calls_7d: number;
-  win_rate_7d: number;
-  avg_gain_7d: number;
-  total_calls_14d: number;
-  win_rate_14d: number;
-  avg_gain_14d: number;
-  total_calls_30d: number;
-  win_rate_30d: number;
-  avg_gain_30d: number;
+  x5_rate_1d: number;
+  x10_rate_1d: number;
+  // ... (metrics for 3d, 7d, 14d, 30d follow the same pattern)
   total_calls_all: number;
   win_rate_all: number;
   avg_gain_all: number;
-
-  // Advanced & All-Time Metrics
   x5_rate_all: number;
   x10_rate_all: number;
+
+  // Top-Level Advanced Metrics (often null)
   unique_tokens: number;
   last_call_at: string;
   first_call_at: string;
-  intelligent_sl: number | null;
-  intelligent_tp: number | null;
-  profit_risk_ratio: number | null;
-  rds_score: number | null;
-  survival_rate_percent: number | null;
   time_to_ath_minutes: number | null;
+  survival_rate_percent: number | null;
+  profit_risk_ratio: number | null;
+  average_gain_percent: number | null;
+  intelligent_tp: number | null;
+  intelligent_sl: number | null;
+  rds_score: number | null;
+  channel_style: string | null;
   status: string;
-  updated_at: string | null;
+
+  // Nested Advanced Analytics by Timeframe
+  analytics_by_timeframe: {
+    [key: string]: TimeframeAnalytics; // e.g., "30d": { ... }
+  };
 }
 ```
 
