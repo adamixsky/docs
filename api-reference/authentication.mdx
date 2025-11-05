@@ -1,23 +1,17 @@
 ---
-title: 'Authentication'
-description: 'How to authenticate with the Outlight API'
+title: 'Authentication & Rate Limiting'
+description: 'How to authenticate with the Outlight API and handle rate limits'
 ---
 
 ## Overview
 
-The Outlight API currently provides public access to most endpoints. No authentication is required for the endpoints documented in this API reference.
+The Outlight API is currently public and does not require an authentication token or API key. All endpoints documented in this reference are accessible to anyone.
 
-## Public Access
-
-All endpoints documented in this reference are publicly accessible:
-
-- ✅ **Channels API** - Search, list, and analyze channels
-- ✅ **Tokens API** - Search, track, and analyze tokens
-- ✅ **Data Models** - All response data models
+However, to ensure fair usage and system stability, public endpoints are subject to **rate limiting**. This page explains how to monitor your usage and handle rate limits gracefully.
 
 ## Request Headers
 
-While authentication is not required, we recommend including standard headers in your requests:
+While authentication is not required, we recommend including standard headers in your requests for better tracking and compatibility.
 
 ```http
 GET /api/channels/search?q=crypto&limit=10
@@ -30,38 +24,28 @@ User-Agent: YourAppName/1.0
 ## Rate Limiting
 
 <Warning>
-  Public endpoints may be subject to rate limiting to ensure fair usage and system stability.
+  Exceeding the request limit will result in a `429 Too Many Requests` error. All public endpoints are rate-limited.
 </Warning>
 
 ### Rate Limit Headers
 
-Monitor these response headers for rate limit information:
+You can monitor your current rate limit status by inspecting the following headers in every API response:
 
 | Header | Description |
-|--------|-------------|
-| `X-RateLimit-Limit` | Maximum requests per time window |
-| `X-RateLimit-Remaining` | Remaining requests in current window |
-| `X-RateLimit-Reset` | Unix timestamp when limit resets |
+|---|---|
+| `X-RateLimit-Limit` | The maximum number of requests you can make in the current time window. |
+| `X-RateLimit-Remaining` | The number of requests you have left in the current window. |
+| `X-RateLimit-Reset` | The Unix timestamp indicating when the current window resets. |
 
 ### Rate Limit Response
 
-When rate limited, you'll receive a 429 response:
-
-```json
-{
-  "error": {
-    "code": "RATE_LIMITED",
-    "message": "Too many requests. Please try again later.",
-    "retry_after": 60
-  }
-}
-```
+If you exceed the limit, the API will respond with a `429` status code. The response body will follow the standard [Error Response structure](/api-reference/models/response-models#error-response-structure) with the code `RATE_LIMITED`.
 
 ## Best Practices
 
 ### 1. Implement Retry Logic
 
-Handle rate limits gracefully:
+The most important practice is to handle rate limits gracefully by implementing a retry mechanism with backoff.
 
 ```python
 import time
@@ -72,18 +56,21 @@ def api_request_with_retry(url, params, max_retries=3):
         response = requests.get(url, params=params)
         
         if response.status_code == 429:
-            retry_after = response.json().get('error', {}).get('retry_after', 60)
+            error = response.json().get('error', {})
+            retry_after = error.get('retry_after', 60)
+            print(f"Rate limited. Retrying in {retry_after} seconds...")
             time.sleep(retry_after)
             continue
-            
-        return response
+        
+        response.raise_for_status() # Raise an exception for other errors
+        return response.json()
     
     raise Exception("Max retries exceeded")
 ```
 
 ### 2. Cache Responses
 
-Cache frequently accessed data to reduce API calls:
+Cache responses for frequently accessed data to reduce the number of API calls you make.
 
 ```javascript
 const cache = new Map();
@@ -92,64 +79,30 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 async function getCachedData(key, fetchFn) {
   const cached = cache.get(key);
   
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+  if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
     return cached.data;
   }
   
   const data = await fetchFn();
   cache.set(key, { data, timestamp: Date.now() });
-  
   return data;
 }
 ```
 
 ### 3. Use Pagination Efficiently
 
-Request only the data you need:
+When fetching lists of data, request only the number of items you need per page instead of always requesting the maximum.
 
 ```python
-# Good: Request specific page size
-response = requests.get(
-    "https://prod.api.sauron.outlight.fun/api/channels",
-    params={"page": 1, "limit": 20}
-)
+# Good: Request a specific page size
+params = {"page": 1, "limit": 20}
 
-# Avoid: Requesting maximum limit unnecessarily
-# params={"page": 1, "limit": 200}
+# Avoid: Requesting the maximum limit unnecessarily
+# params = {"page": 1, "limit": 200}
 ```
 
-## Future Authentication
+## Future Plans
 
 <Info>
-  We may introduce API keys or OAuth authentication in the future for:
-  - Higher rate limits
-  - Premium features
-  - Webhook subscriptions
-  - Custom data access
+  We may introduce API keys or OAuth in the future to provide access to higher rate limits, premium features, or custom data. If this happens, existing public endpoints will remain accessible to maintain backward compatibility.
 </Info>
-
-If authentication is added, existing public endpoints will remain accessible to maintain backward compatibility.
-
-## Error Handling
-
-Always handle potential errors in your applications:
-
-```typescript
-try {
-  const response = await fetch(
-    "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=10"
-  );
-  
-  if (!response.ok) {
-    const error = await response.json();
-    console.error('API Error:', error);
-    // Handle error appropriately
-  }
-  
-  const data = await response.json();
-  // Process data
-} catch (error) {
-  console.error('Network Error:', error);
-  // Handle network errors
-}
-```

@@ -21,60 +21,19 @@ Search for social media channels that make cryptocurrency token calls. Find chan
 ## Response
 
 <ResponseField name="channels" type="array">
-  Array of channel objects matching the search criteria.
-  
-  <Expandable title="Channel Object">
-    <ResponseField name="channel_id" type="string">
-      Unique identifier for the channel (e.g., "@ExampleChannel")
-    </ResponseField>
-    
-    <ResponseField name="username" type="string">
-      Channel username
-    </ResponseField>
-    
-    <ResponseField name="name" type="string">
-      Display name of the channel
-    </ResponseField>
-    
-    <ResponseField name="link" type="string">
-      URL to the channel
-    </ResponseField>
-    
-    <ResponseField name="subscriber_count" type="integer">
-      Number of subscribers
-    </ResponseField>
-    
-    <ResponseField name="profile_photo_url" type="string">
-      URL to profile picture
-    </ResponseField>
-    
-    <ResponseField name="platform" type="string">
-      Platform: "telegram" or "twitter"
-    </ResponseField>
-    
-    <ResponseField name="win_rate" type="string">
-      Overall win rate percentage
-    </ResponseField>
-    
-    <ResponseField name="avg_gain" type="string">
-      Average gain percentage
-    </ResponseField>
-  </Expandable>
+  An array of [Channel](/api-reference/models/channel-models#channel) objects matching the search criteria.
 </ResponseField>
 
 <ResponseField name="count" type="integer">
-  Total number of results found
+  The total number of results found.
 </ResponseField>
 
 ## Example Request
 
 <CodeGroup>
-
 ```bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
-```
-
-```python Python
+``````python Python
 import requests
 
 response = requests.get(
@@ -84,35 +43,28 @@ response = requests.get(
         "limit": 5
     }
 )
-
 data = response.json()
-```
-
-```javascript JavaScript
+``````javascript JavaScript
 const response = await fetch(
   "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
 );
-
 const data = await response.json();
-```
-
-```typescript TypeScript
+``````typescript TypeScript
 interface SearchChannelsResponse {
-  channels: Channel[];
+  channels: Channel[]; // Assuming 'Channel' type is defined elsewhere
   count: number;
 }
 
 const response = await fetch(
   "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
 );
-
 const data: SearchChannelsResponse = await response.json();
 ```
-
 </CodeGroup>
 
 ## Example Response
 
+*For a detailed breakdown of the object structure in the `channels` array, see the [Channel model](/api-reference/models/channel-models#channel).*
 ```json
 {
   "channels": [
@@ -122,16 +74,9 @@ const data: SearchChannelsResponse = await response.json();
       "name": "Crypto Gems Official",
       "link": "https://t.me/CryptoGems",
       "subscriber_count": 125000,
-      "profile_photo_url": "https://example.com/photo.jpg",
       "platform": "telegram",
-      "calls_analyzed": 450,
       "win_rate": "72.5",
       "avg_gain": "185.3",
-      "total_calls_30d": 45,
-      "win_rate_30d": "75.0",
-      "avg_gain_30d": "210.5",
-      "x5_rate": "15.2",
-      "x10_rate": "8.5",
       "last_updated": "2025-01-15T10:30:00Z"
     }
   ],
@@ -163,3 +108,4 @@ const data: SearchChannelsResponse = await response.json();
     ```
   </Tab>
 </ResponseExample>
+

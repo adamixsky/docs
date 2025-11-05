@@ -6,185 +6,60 @@ description: 'Search for tokens by address, name, or symbol'
 
 ## Overview
 
-Search for cryptocurrency tokens by their contract address, name, or symbol. Find tokens that have been called across various channels.
+Search for cryptocurrency tokens by their contract address, name, or symbol. The search is performed across multiple blockchains and results are sorted by relevance.
 
 ## Request
 
 <ParamField query="q" type="string" required>
-  Search query - can be:
-  - Token contract address
-  - Token name
-  - Token symbol
+  Search query. Can be a token contract address, name, or symbol.
 </ParamField>
 
 ## Response
 
-<ResponseField name="results" type="array">
-  Array of token search result objects
-  
-  <Expandable title="Token Search Result">
-    <ResponseField name="address" type="string">
-      Token contract address
-    </ResponseField>
-    
-    <ResponseField name="name" type="string">
-      Token name
-    </ResponseField>
-    
-    <ResponseField name="symbol" type="string">
-      Token symbol
-    </ResponseField>
-    
-    <ResponseField name="logo_url" type="string">
-      URL to token logo
-    </ResponseField>
-    
-    <ResponseField name="current_fdv" type="string">
-      Current fully diluted valuation
-    </ResponseField>
-    
-    <ResponseField name="sufficient_liquidity" type="boolean">
-      Whether token has sufficient liquidity
-    </ResponseField>
-    
-    <ResponseField name="unique_channels" type="integer">
-      Number of unique channels that called this token
-    </ResponseField>
-    
-    <ResponseField name="total_subscribers" type="integer">
-      Combined subscriber count of all channels
-    </ResponseField>
-    
-    <ResponseField name="call_count" type="integer">
-      Total number of calls
-    </ResponseField>
-    
-    <ResponseField name="last_updated" type="string">
-      ISO 8601 timestamp of last update
-    </ResponseField>
-    
-    <ResponseField name="website" type="string">
-      Token website URL
-    </ResponseField>
-    
-    <ResponseField name="telegram_link" type="string">
-      Telegram community link
-    </ResponseField>
-    
-    <ResponseField name="twitter_link" type="string">
-      Twitter/X account link
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+The endpoint returns a **direct JSON array** of [TokenSearchResult](/api-reference/models/token-models#tokensearchresult) objects. Note that unlike other list endpoints, there is no wrapper object.
 
 ## Example Request
 
 <CodeGroup>
-
 ```bash cURL
-curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/search?q=MOON"
-```
-
-```python Python
+curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/search?q=SOL"
+``````python Python
 import requests
 
 response = requests.get(
     "https://prod.api.sauron.outlight.fun/api/tokens/search",
-    params={"q": "MOON"}
+    params={"q": "SOL"}
 )
-
-data = response.json()
-```
-
-```javascript JavaScript
+data = response.json() # data will be a list of dictionaries
+``````javascript JavaScript
 const response = await fetch(
-  "https://prod.api.sauron.outlight.fun/api/tokens/search?q=MOON"
+  "https://prod.api.sauron.outlight.fun/api/tokens/search?q=SOL"
 );
-
-const data = await response.json();
-```
-
-```typescript TypeScript
-interface TokenSearchResult {
-  address: string;
-  name: string;
-  symbol: string;
-  logo_url: string;
-  current_fdv: string;
-  sufficient_liquidity: boolean;
-  unique_channels: number;
-  total_subscribers: number;
-  call_count: number;
-  last_updated: string;
-  website?: string;
-  telegram_link?: string;
-  twitter_link?: string;
-}
-
-const response = await fetch(
-  "https://prod.api.sauron.outlight.fun/api/tokens/search?q=MOON"
-);
-
-const data: TokenSearchResult[] = await response.json();
-```
-
+const data = await response.json(); // data will be an array of objects```
 </CodeGroup>
 
 ## Example Response
 
+*For a detailed breakdown of the object structure, see the [TokenSearchResult model](/api-reference/models/token-models#tokensearchresult).*
 ```json
 [
   {
-    "address": "0x1234567890abcdef1234567890abcdef12345678",
-    "name": "Moon Token",
-    "symbol": "MOON",
-    "logo_url": "https://example.com/moon-logo.png",
-    "current_fdv": "12500000",
+    "address": "So11111111111111111111111111111111111111112",
+    "name": "Wrapped SOL",
+    "symbol": "SOL",
+    "logo_url": "https://dd.dexscreener.com/ds-data/tokens/solana/So11111111111111111111111111111111111111112.png?key=525a21",
+    "current_fdv": "83030282471.9161",
     "sufficient_liquidity": true,
-    "unique_channels": 15,
-    "total_subscribers": 850000,
-    "call_count": 42,
-    "last_updated": "2025-01-15T14:30:00Z",
-    "website": "https://moontoken.io",
-    "telegram_link": "https://t.me/moontoken",
-    "twitter_link": "https://twitter.com/moontoken"
-  },
-  {
-    "address": "0xabcdef1234567890abcdef1234567890abcdef12",
-    "name": "MoonShot",
-    "symbol": "MOONS",
-    "logo_url": "https://example.com/moonshot-logo.png",
-    "current_fdv": "5500000",
-    "sufficient_liquidity": true,
-    "unique_channels": 8,
-    "total_subscribers": 320000,
-    "call_count": 18,
-    "last_updated": "2025-01-15T13:45:00Z",
-    "website": "https://moonshot.finance",
-    "telegram_link": "https://t.me/moonshotfinance",
-    "twitter_link": "https://twitter.com/moonshotfi"
+    "unique_channels": 453,
+    "total_subscribers": 1496660,
+    "call_count": "806",
+    "last_updated": "2025-11-06T12:00:00.000Z"
   }
 ]
 ```
 
 ## Search Tips
 
-- **By Address**: Use the full contract address for exact match
-- **By Symbol**: Search is case-insensitive (e.g., "BTC", "btc", "Btc" all work)
-- **By Name**: Partial matches are supported (e.g., "moon" will find "Moon Token", "MoonShot", etc.)
-
-## Response Fields
-
-| Field | Description |
-|-------|-------------|
-| `current_fdv` | Current fully diluted valuation in USD |
-| `sufficient_liquidity` | Indicates if token has enough liquidity for trading |
-| `unique_channels` | Number of different channels that have called this token |
-| `total_subscribers` | Combined subscriber count across all channels |
-| `call_count` | Total number of times token has been called |
-
-## Notes
-
-- Results are sorted by relevance to the search query
-- The search is performed across multiple blockchains
-- Only tokens with at least one channel call are returned
+- **By Address**: Use the full contract address for an exact match.
+- **By Symbol**: The search is case-insensitive (e.g., "sol" and "SOL" yield the same results).
+- **By Name**: Partial matches are supported (e.g., "wrapped" will find "Wrapped SOL").

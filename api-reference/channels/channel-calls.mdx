@@ -58,8 +58,12 @@ Retrieve a list of all tokens that have been called by a specific channel, with 
 
 <CodeGroup>
 
-```````bash cURL
-curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@MontyAlerts/calls?page=1&limit=10&sort=highest_gain&order=desc"``````python Python
+```bash cURL
+curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@MontyAlerts/calls?page=1&limit=10&sort=highest_gain&order=desc"
+```
+
+
+```python Python
 import requests
 
 channel_username = "@MontyAlerts"
@@ -74,7 +78,10 @@ response = requests.get(
 )
 
 data = response.json()
-``````javascript JavaScript
+```
+
+
+```javascript JavaScript
 const channelUsername = "@MontyAlerts";
 const params = new URLSearchParams({
   page: 1,
@@ -88,13 +95,13 @@ const response = await fetch(
 );
 
 const data = await response.json();
-```````
+```
 
 </CodeGroup>
 
 ## Example Response
 
-[_`The structure of the objects in the calls array is defined in the ChannelCall model.`_](/api-reference/models/channel-models#channelcall)
+[_For a detailed breakdown of the object structure, see the ChannelCall model._](/api-reference/models/channel-models#channelcall)
 
 ```json
 {

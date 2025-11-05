@@ -1,102 +1,80 @@
 ---
-title: Outlight.fun API Documentation
-description: 'Track and analyze cryptocurrency token calls across social media channels'
+title: 'Outlight.fun API Documentation'
+description: 'Track and analyze cryptocurrency token calls across social media channels.'
 ---
 
-# Welcome to Outlight.fun API
+# Outlight.fun API
 
-## Start Building with Outlight.fun API
+The Outlight.fun API provides powerful, real-time tools for tracking and analyzing cryptocurrency token calls across Telegram and Twitter. Build your next crypto project with our comprehensive data.
 
-The Outlight.fun API provides powerful tools for tracking and analyzing cryptocurrency token calls across various social media channels including Telegram and Twitter.
+## Get Started
 
 <CardGroup cols={2}>
   <Card
-    title="Quick Start"
+    title="Quickstart Guide"
     icon="rocket"
     href="/introduction/quickstart"
   >
-    Get up and running with the API in under 5 minutes
+    New to the API? Get up and running in less than 5 minutes.
   </Card>
   <Card
-    title="API Reference"
+    title="Full API Reference"
     icon="code"
     href="/api-reference/introduction"
   >
-    Explore all available endpoints and parameters
+    Explore all available endpoints, parameters, and data models.
   </Card>
 </CardGroup>
 
-## Core Features
+## What You Can Do
 
 <CardGroup cols={3}>
   <Card
-    title="Channel Analytics"
+    title="Analyze Channels"
     icon="chart-line"
-    href="/api-reference/channels/search-channels"
+    href="/api-reference/channels/list-channels"
   >
-    Track channel performance and win rates
+    Track channel performance, win rates, and historical gains.
   </Card>
   <Card
-    title="Token Tracking"
+    title="Track Tokens"
     icon="coins"
-    href="/api-reference/tokens/search-tokens"
+    href="/api-reference/tokens/recent-tokens"
   >
-    Monitor token calls and FDV changes
+    Monitor token calls in real-time and discover trending assets.
   </Card>
   <Card
-    title="Real-time Data"
+    title="Build Custom Tools"
     icon="bolt"
     href="/api-reference/introduction"
   >
-    Access up-to-date market information
+    Integrate our data to build trading bots, analytics dashboards, and more.
   </Card>
 </CardGroup>
 
-## Popular Endpoints
-
-### Channels API
-- [Search Channels](/api-reference/channels/search-channels) - Find channels by keywords
-- [List Channels](/api-reference/channels/list-channels) - Get paginated channel lists
-- [Channel Details](/api-reference/channels/channel-details) - Comprehensive channel stats
-- [Channel Calls](/api-reference/channels/channel-calls) - View tokens called by channels
-
-### Tokens API  
-- [Search Tokens](/api-reference/tokens/search-tokens) - Find tokens by address or symbol
-- [Recent Tokens](/api-reference/tokens/recent-tokens) - Get recently called tokens
-- [Most Called Tokens](/api-reference/tokens/most-called-tokens) - Discover trending tokens
-- [Token Details](/api-reference/tokens/token-details) - Complete token information
-
 ## Quick Example
 
+See how easy it is to search for channels mentioning "crypto".
+
 ```bash
-curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=10"
+curl "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
 ```
 
 ## Need Help?
 
 <CardGroup cols={2}>
   <Card
-    title="Authentication"
+    title="Authentication & Rate Limits"
     icon="shield"
     href="/api-reference/authentication"
   >
-    Learn about API access and rate limits
+    Learn about our public access policy and how to handle rate limits.
   </Card>
   <Card
     title="Data Models"
     icon="database"
-    href="/api-reference/models/channel"
+    href="/api-reference/models/channel-models"
   >
-    Understand response structures
+    Understand the structure of all API response objects.
   </Card>
 </CardGroup>
-
-## API Information
-
-- **Base URL:** `https://prod.api.sauron.outlight.fun`
-- **Version:** 1.0.0
-- **Authentication:** Currently public access
-
-<Note>
-  This API is currently in public access mode. No authentication required.
-</Note>

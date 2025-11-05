@@ -9,7 +9,7 @@ This page documents the data models used for channel-related endpoints in the Ou
 
 ## Channel
 
-Basic channel information object returned by list and search endpoints.
+Basic channel information object returned by `list` and `search` endpoints.
 
 ```typescript
 interface Channel {
@@ -29,33 +29,29 @@ interface Channel {
   x5_rate: string;               // Overall rate of 5x returns
   x10_rate: string;              // Overall rate of 10x returns
   last_updated: string;          // ISO 8601 timestamp
-}
-```
+}```
 
 ### Field Details
 
 | Field | Type | Description |
-|-------|------|-------------|
-| `channel_id` | string | Unique identifier, typically starts with "@" |
-| `username` | string | Channel username without "@" |
-| `name` | string | Display name shown in the channel |
-| `link` | string | Direct URL to the channel |
-| `subscriber_count` | integer | Current subscriber/follower count |
-| `profile_photo_url` | string | URL to channel's profile picture |
-| `platform` | enum | Either "telegram" or "twitter" |
-| `calls_analyzed` | integer | Total number of token calls analyzed |
-| `win_rate` | string | Percentage of profitable calls (all time) |
-| `avg_gain` | string | Average percentage gain across all calls (all time) |
-| `total_calls_30d` | integer | Number of calls in the last 30 days |
-| `win_rate_30d` | string | Win rate for the last 30 days |
-| `avg_gain_30d` | string | Average gain for the last 30 days |
-| `x5_rate` | string | Percentage of calls achieving 5x returns (all time) |
-| `x10_rate` | string | Percentage of calls achieving 10x returns (all time) |
-| `last_updated` | string | Last data update timestamp |
+|---|---|---|
+| `channel_id` | string | Unique identifier, typically starts with "@". |
+| `username` | string | Channel username without "@". |
+| `name` | string | Display name shown on the platform. |
+| `link` | string | Direct URL to the channel. |
+| `subscriber_count` | integer | Current number of subscribers or followers. |
+| `profile_photo_url` | string | URL to the channel's profile picture. |
+| `platform` | enum | The social media platform: "telegram" or "twitter". |
+| `calls_analyzed` | integer | Total number of token calls that have been analyzed. |
+| `win_rate` | string | Percentage of profitable calls (all time). |
+| `avg_gain` | string | Average percentage gain across all calls (all time). |
+| `total_calls_30d` | integer | Number of calls made in the last 30 days. |
+| `win_rate_30d` | string | Win rate for calls made in the last 30 days. |
+| `avg_gain_30d` | string | Average gain for calls made in the last 30 days. |
 
-## Channel Info
+## ChannelInfo
 
-Extended channel information with detailed statistics for multiple timeframes, returned by the `GET /api/channels/{channelId}/info` endpoint. Note the flat structure for timeframe-specific metrics.
+Extended channel information returned by `GET /api/channels/{channelId}/info`. This model uses a flat structure for timeframe-specific metrics.
 
 ```typescript
 interface ChannelInfo {
@@ -106,26 +102,9 @@ interface ChannelInfo {
 }
 ```
 
-### Field Details for ChannelInfo
-
-| Field Group | Field | Type | Description |
-|---|---|---|---|
-| **Basic Info** | `channel_id`, `username`, etc. | - | See `Channel` model for details. |
-| **Timeframe Metrics** | `total_calls_1d`, `win_rate_1d`, etc. | number | Performance metrics for specific periods (1, 3, 7, 14, 30 days, and all time). |
-| **Advanced Metrics**| `x5_rate_all` / `x10_rate_all` | number | Percentage of calls achieving 5x/10x returns (all time). |
-| | `unique_tokens` | integer | Number of different tokens called. |
-| | `last_call_at` / `first_call_at` | string | Timestamps of the most recent and first calls. |
-| | `intelligent_sl` / `intelligent_tp` | number \| null | Suggested stop-loss / take-profit percentage. |
-| | `profit_risk_ratio` | number \| null | Ratio of potential profit to risk. |
-| | `rds_score` | number \| null | Risk-Diversification-Success score (0-100). |
-| | `survival_rate_percent` | number \| null | Percentage of tokens that maintained value. |
-| | `time_to_ath_minutes` | number \| null | Average time to reach all-time high in minutes. |
-| **Metadata** | `status` | string | Analysis status of the channel (e.g., "pending"). |
-| | `updated_at` | string \| null | Timestamp of the last data update. |
-
 ## ChannelCall
 
-Represents a specific token call made by a channel.
+Represents a specific token call made by a channel, returned by `GET /api/channels/{channelId}/calls`.
 
 ```typescript
 interface ChannelCall {
@@ -148,7 +127,6 @@ interface ChannelCall {
   lowest_fdv_at: string;
   current_gain: string;
   highest_gain: string;
-  // Pola dotyczące tokena, obecne w tej odpowiedzi:
   website: string | null;
   telegram_link: string | null;
   twitter_link: string | null;
@@ -156,72 +134,3 @@ interface ChannelCall {
   total_subscribers: string;
 }
 ```
-
-### Field Details
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique call identifier. |
-| `channel_id` | string | Channel that made the call. |
-| `token_address` | string | Token contract address. |
-| `token_name` | string | Name of the called token. |
-| `token_symbol` | string | Token ticker symbol. |
-| `token_logo_url` | string | URL to token logo. |
-| `message_id` | string | Original message ID. |
-| `message_link` | string | Direct link to the call message. |
-| `message_content` | string | Plain text message content. |
-| `message_html` | string | HTML formatted message. |
-| `called_at` | string | Timestamp when call was made. |
-| `fdv_at_call` | string | FDV at the time of call (as string for precision). |
-| `current_fdv` | string | Current FDV (as string for precision). |
-| `highest_fdv` | string | Highest FDV reached since call (as string). |
-| `lowest_fdv` | string | Lowest FDV reached since call (as string). |
-| `highest_fdv_at` | string | Timestamp of highest FDV. |
-| `lowest_fdv_at` | string | Timestamp of lowest FDV. |
-| `current_gain` | string | Current gain percentage (as string). |
-| `highest_gain` | string | Highest gain percentage achieved (as string). |
-
-## Example Usage
-
-### TypeScript
-```typescript
-// Fetching channel details
-async function getChannelInfo(channelId: string): Promise<ChannelInfo> {
-  const response = await fetch(
-    `https://prod.api.sauron.outlight.fun/api/channels/${channelId}/info`
-  );
-  
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  
-  return await response.json() as ChannelInfo;
-}
-
-// Using the data
-const channel = await getChannelInfo("@MontyAlerts");
-console.log(`Channel: ${channel.name}`);
-console.log(`All-time Win Rate: ${channel.win_rate_all}%`);
-console.log(`7-day Win Rate: ${channel.win_rate_7d}%`);
-console.log(`RDS Score: ${channel.rds_score}`);
-```
-
-### Python
-```python
-from typing import Dict, Any
-import requests
-
-def get_channel_info(channel_id: str) -> Dict[str, Any]:
-    """Fetch detailed channel information"""
-    response = requests.get(
-        f"https://prod.api.sauron.outlight.fun/api/channels/{channel_id}/info"
-    )
-    response.raise_for_status()
-    return response.json()
-
-# Using the data
-channel = get_channel_info("@MontyAlerts")
-print(f"Channel: {channel['name']}")
-print(f"All-time Win Rate: {channel['win_rate_all']}%")
-print(f"7-day Win Rate: {channel['win_rate_7d']}%")
-print(f"RDS Score: {channel['rds_score']}")```

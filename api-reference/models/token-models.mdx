@@ -7,7 +7,7 @@ description: 'Data structures for token-related API responses'
 
 This page documents the data models used for token-related endpoints in the Outlight API.
 
-## 1. Token Search Result
+## TokenSearchResult
 
 Basic token information returned by the `GET /api/tokens/search` endpoint.
 
@@ -21,7 +21,7 @@ interface TokenSearchResult {
   sufficient_liquidity: boolean;
   unique_channels: number;
   total_subscribers: number;
-  call_count: string; // Corrected: API returns this as a string
+  call_count: string;
   last_updated: string;
   website?: string | null;
   telegram_link?: string | null;
@@ -29,24 +29,9 @@ interface TokenSearchResult {
 }
 ```
 
-### Field Details
+## RecentToken
 
-| Field | Type | Description |
-|---|---|---|
-| `address` | string | Token contract address. |
-| `name` | string | Official token name. |
-| `symbol` | string | Token ticker symbol. |
-| `logo_url` | string \| null | URL to token logo image. |
-| `current_fdv` | string | Current fully diluted valuation in USD (as string). |
-| `sufficient_liquidity` | boolean | Whether token has enough liquidity for trading. |
-| `unique_channels` | integer | Number of different channels that called this token. |
-| `total_subscribers` | integer | Combined subscriber count of all calling channels. |
-| `call_count` | string | Total number of times token was called (as string). |
-| `last_updated` | string | ISO 8601 timestamp of last data update. |
-
-## 2. Recent Token
-
-Extends `TokenSearchResult` with blockchain info and a detailed list of recent calls. Returned by `GET /api/tokens/recent`.
+Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 
 ```typescript
 interface RecentToken extends TokenSearchResult {
@@ -78,22 +63,20 @@ interface RecentTokenChannelCall {
 }
 ```
 
-## 3. Most Called Token
+## MostCalledToken
 
-Token information ranked by call frequency. Returned by `GET /api/tokens/most-called`.
+Token information ranked by call frequency, returned by `GET /api/tokens/most-called`.
 
 ```typescript
 interface MostCalledToken extends TokenSearchResult {
   chain: string;
-  ath: string;
-  total_calls: number;       // Total calls within the specified timeframe
-  unique_channels: number;
-  total_subscribers: number;
-  last_call_at: string;      // Timestamp of the last call in the timeframe
-  channel_calls: MostCalledChannelCallDetail[]; // Breakdown of calls per channel
+  ath: string; // Note: This endpoint returns ATH as a string
+  total_calls: number;
+  last_call_at: string;
+  channel_calls: MostCalledChannelCallDetail[];
 }
 
-// Detailed breakdown of calls per channel within a MostCalledToken
+// Breakdown of calls per channel within a MostCalledToken
 interface MostCalledChannelCallDetail {
   channel_id: string;
   channel_name: string;
@@ -104,9 +87,9 @@ interface MostCalledChannelCallDetail {
 }
 ```
 
-## 4. Token Response
+## TokenResponse
 
-Complete, detailed information for a single token. Returned by `GET /api/tokens/{address}`.
+Complete information for a single token, returned by `GET /api/tokens/{address}`.
 
 ```typescript
 interface TokenResponse {
@@ -128,10 +111,10 @@ interface TokenResponse {
   total_subscribers: number;
   avg_gain: number | null;
   last_updated: string;
-  channel_calls: TokenDetailChannelCall[]; // Complete list of all calls
+  channel_calls: TokenDetailChannelCall[];
 }
 
-// The structure of a call inside TokenResponse is very detailed
+// Detailed structure of a call inside a TokenResponse object
 interface TokenDetailChannelCall {
   id: number;
   channel_id: string;
@@ -150,7 +133,7 @@ interface TokenDetailChannelCall {
   lowest_fdv_at: string;
   called_at: string;
   win_rate: number;
-  total_calls: number; // Corrected: Added this field
+  total_calls: number;
   avg_gain: number;
   platform: string;
 }
@@ -158,46 +141,154 @@ interface TokenDetailChannelCall {
 
 ## Data Precision & Types
 
-Many numeric values like FDV or price can be very large or require high precision. Be aware of the following:
+Many numeric values can be very large or require high precision. Be aware of the following:
 
-- **String for Precision**: Fields like `current_fdv` in `TokenSearchResult` are returned as strings to avoid floating-point inaccuracies. Always parse these using a high-precision library if needed.
-- **Number for Calculation**: Fields like `price` or `avg_gain` in `TokenResponse` are often returned as standard numbers, suitable for direct use in calculations.
-- **Handling `null`**: Many fields (e.g., `volume`, `total_holders`, `price`) can be `null` if the data is not available. Always check for `null` before using these values.
+- **String for Precision**: Fields like `current_fdv` in `TokenSearchResult` are returned as strings to avoid floating-point inaccuracies.
+- **Number for Calculation**: Fields like `price` or `avg_gain` in `TokenResponse` are often returned as standard numbers.
+- **Handling `null`**: Many fields (e.g., `volume`, `total_holders`) can be `null` if the data is not available. Always check for `null` before using these values.title: 'Token Models'
+description: 'Data structures for token-related API responses'
+---
 
-## Example Usage
+## Overview
 
-### Python
-```python
-import requests
-from typing import Dict, Any
+This page documents the data models used for token-related endpoints in the Outlight API.
 
-def get_token_details(address: str) -> Dict[str, Any]:
-    """Fetch complete token information."""
-    url = f"https://prod.api.sauron.outlight.fun/api/tokens/{address}"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+## TokenSearchResult
 
-def analyze_token(token: Dict[str, Any]) -> Dict[str, Any]:
-    """Analyze token performance metrics."""
-    avg_gain = token.get('avg_gain') or 0.0
-    top_holders = token.get('top_10_holders_percentage') or 0.0 # Handle None/null
-    
-    return {
-        'name': token['name'],
-        'symbol': token['symbol'],
-        'avg_gain': avg_gain,
-        'high_performer': avg_gain > 500,
-        'risk_level': 'High' if top_holders > 50 else 'Medium',
-        'popularity': token['unique_channels']
-    }
+Basic token information returned by the `GET /api/tokens/search` endpoint.
 
-# Example
-token_address = "5KfqXLAUq9dVZx6hkKEJteno6GtfoA7idv2iWNtwpump"
-token_data = get_token_details(token_address)
-analysis = analyze_token(token_data)
-
-print(f"Token: {analysis['name']} ({analysis['symbol']})")
-print(f"Average Gain: {analysis['avg_gain']}%")
-print(f"Risk Level: {analysis['risk_level']}")
+```typescript
+interface TokenSearchResult {
+  address: string;
+  name: string;
+  symbol: string;
+  logo_url: string | null;
+  current_fdv: string;
+  sufficient_liquidity: boolean;
+  unique_channels: number;
+  total_subscribers: number;
+  call_count: string;
+  last_updated: string;
+  website?: string | null;
+  telegram_link?: string | null;
+  twitter_link?: string | null;
+}
 ```
+
+## RecentToken
+
+Detailed token information returned by the `GET /api/tokens/recent` endpoint.
+
+```typescript
+interface RecentToken extends TokenSearchResult {
+  chain: "solana" | "bsc" | "ethereum" | "polygon" | "arbitrum" | "avalanche";
+  ath: number;
+  most_recent_call: string;
+  channel_calls: RecentTokenChannelCall[];
+}
+
+// Detailed call object within a RecentToken
+interface RecentTokenChannelCall {
+  id: number;
+  channel_id: string;
+  channel_name: string;
+  subscriber_count: number;
+  profile_photo_url: string;
+  channel_link: string;
+  message_id: number;
+  message_link: string;
+  fdv_at_call: number;
+  highest_fdv: number;
+  lowest_fdv: number;
+  highest_fdv_at: string;
+  lowest_fdv_at: string;
+  called_at: string;
+  win_rate: number;
+  avg_gain: number;
+  platform: string;
+}
+```
+
+## MostCalledToken
+
+Token information ranked by call frequency, returned by `GET /api/tokens/most-called`.
+
+```typescript
+interface MostCalledToken extends TokenSearchResult {
+  chain: string;
+  ath: string; // Note: This endpoint returns ATH as a string
+  total_calls: number;
+  last_call_at: string;
+  channel_calls: MostCalledChannelCallDetail[];
+}
+
+// Breakdown of calls per channel within a MostCalledToken
+interface MostCalledChannelCallDetail {
+  channel_id: string;
+  channel_name: string;
+  subscriber_count: number;
+  call_count: number;
+  first_call: string;
+  last_call: string;
+}
+```
+
+## TokenResponse
+
+Complete information for a single token, returned by `GET /api/tokens/{address}`.
+
+```typescript
+interface TokenResponse {
+  address: string;
+  name: string;
+  symbol: string;
+  logo_url: string | null;
+  website: string | null;
+  telegram_link: string | null;
+  twitter_link: string | null;
+  price: number | null;
+  current_fdv: number | null;
+  ath: number | null;
+  volume: number | null;
+  sufficient_liquidity: boolean;
+  total_holders: number | null;
+  top_10_holders_percentage: number | null;
+  unique_channels: number;
+  total_subscribers: number;
+  avg_gain: number | null;
+  last_updated: string;
+  channel_calls: TokenDetailChannelCall[];
+}
+
+// Detailed structure of a call inside a TokenResponse object
+interface TokenDetailChannelCall {
+  id: number;
+  channel_id: string;
+  channel_name: string;
+  subscriber_count: number;
+  profile_photo_url: string;
+  channel_link: string;
+  message_id: string;
+  message_link: string;
+  message_content: string;
+  message_html: string;
+  fdv_at_call: number;
+  highest_fdv: number;
+  lowest_fdv: number;
+  highest_fdv_at: string;
+  lowest_fdv_at: string;
+  called_at: string;
+  win_rate: number;
+  total_calls: number;
+  avg_gain: number;
+  platform: string;
+}
+```
+
+## Data Precision & Types
+
+Many numeric values can be very large or require high precision. Be aware of the following:
+
+- **String for Precision**: Fields like `current_fdv` in `TokenSearchResult` are returned as strings to avoid floating-point inaccuracies.
+- **Number for Calculation**: Fields like `price` or `avg_gain` in `TokenResponse` are often returned as standard numbers.
+- **Handling `null`**: Many fields (e.g., `volume`, `total_holders`) can be `null` if the data is not available. Always check for `null` before using these values.

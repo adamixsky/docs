@@ -1,120 +1,99 @@
 ---
 title: 'Quickstart'
-description: 'Start using the Outlight.fun API in under 5 minutes'
+description: 'Make your first API call in under 5 minutes'
 ---
 
-## Setup your first API call
+Get started with the Outlight API by making your first request. This guide will walk you through searching for channels that make token calls.
 
-Get started with the Outlight.fun API by making your first request to search for channels or tokens.
+## 1. Authentication
 
-### Base URL
+The Outlight API is currently public. **No API key is required.**
 
-All API requests should be made to:
+All endpoints are, however, subject to rate limiting. For more details, see the [Authentication & Rate Limiting](/api-reference/authentication) guide.
 
-```
-https://prod.api.sauron.outlight.fun
-```
+## 2. Your First API Call
 
-## Example Requests
+Let's find all channels related to "crypto". The `q` parameter is used for the search query, and `limit` controls the number of results.
 
-### Search for Channels
+Simply copy and paste one of the examples below into your terminal or code editor.
 
 <CodeGroup>
-
 ```bash cURL
-curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=10"
-```
-
-```python Python
+# Use curl to make a GET request from your terminal
+curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
+``````python Python
 import requests
 
+# Use the requests library in Python
+params = {
+    "q": "crypto",
+    "limit": 5
+}
 response = requests.get(
     "https://prod.api.sauron.outlight.fun/api/channels/search",
-    params={
-        "q": "crypto",
-        "limit": 10
-    }
+    params=params
 )
 
-data = response.json()
-print(data)
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print(f"Error: {response.status_code}")
+``````javascript Node.js
+// Use fetch in a Node.js environment
+async function searchChannels() {
+  const response = await fetch(
+    "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=5"
+  );
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  console.log(data);
+}
+
+searchChannels();
 ```
-
-```javascript JavaScript
-const response = await fetch(
-  "https://prod.api.sauron.outlight.fun/api/channels/search?q=crypto&limit=10"
-);
-
-const data = await response.json();
-console.log(data);
-```
-
 </CodeGroup>
 
-### Get Recently Called Tokens
+### Understanding the Response
 
-<CodeGroup>
-
-```bash cURL
-curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/recent?page=1&limit=10"
-```
-
-```python Python
-import requests
-
-response = requests.get(
-    "https://prod.api.sauron.outlight.fun/api/tokens/recent",
-    params={
-        "page": 1,
-        "limit": 10
-    }
-)
-
-data = response.json()
-print(data)
-```
-
-```javascript JavaScript
-const response = await fetch(
-  "https://prod.api.sauron.outlight.fun/api/tokens/recent?page=1&limit=10"
-);
-
-const data = await response.json();
-console.log(data);
-```
-
-</CodeGroup>
-
-## Response Format
-
-All API responses follow a consistent JSON format:
+You will receive a JSON response containing a `channels` array and a `count` of the results. Each object in the array is a **Channel** object.
 
 ```json
 {
-  "channels": [...],  // or "data" for token endpoints
-  "count": 100,       // or pagination info
-  "totalPages": 10,
-  "currentPage": 1
+  "channels": [
+    {
+      "channel_id": "@CryptoGems",
+      "username": "CryptoGems",
+      "name": "Crypto Gems Official",
+      "subscriber_count": 125000,
+      "platform": "telegram",
+      "win_rate": "72.5"
+    }
+  ],
+  "count": 1
 }
 ```
+To understand the full structure of this object, see the [Channel Model](/api-reference/models/channel-models#channel).
 
-## Common Parameters
+## 3. Next Steps
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `page` | integer | Page number for pagination (starts at 1) |
-| `limit` | integer | Number of results per page |
-| `timeframe` | string | Time window (e.g., "1h", "24h", "7d", "30d") |
-| `sort` | string | Sort field |
-| `order` | string | Sort direction ("asc" or "desc") |
-
-## Next Steps
+Congratulations on making your first API call! Here's where to go next:
 
 <CardGroup cols={2}>
-  <Card title="Explore Channels API" icon="users" href="/api-reference/channels/search-channels">
-    Learn how to search and analyze channel data
+  <Card title="API Introduction" icon="book-open" href="/api-reference/introduction">
+    Get a high-level overview of all API capabilities.
   </Card>
-  <Card title="Token Analytics" icon="coins" href="/api-reference/tokens/search-tokens">
-    Discover token tracking capabilities
+  <Card title="Explore All Endpoints" icon="code" href="/api-reference/channels/search-channels">
+    Dive into the complete list of available API endpoints.
+  </Card>
+  <Card title="Data Models" icon="database" href="/api-reference/models/channel-models">
+    Understand the structure of all response objects.
+  </Card>
+  <Card title="Response & Error Formats" icon="file-shield" href="/api-reference/models/response-models">
+    Learn about pagination, errors, and status codes.
   </Card>
 </CardGroup>

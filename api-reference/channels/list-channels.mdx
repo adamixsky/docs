@@ -11,17 +11,15 @@ Retrieve a paginated list of channels with advanced sorting options by various p
 ## Request
 
 <ParamField query="page" type="integer" default="1">
-  Page number (starting from 1)
+  Page number (starting from 1).
 </ParamField>
 
 <ParamField query="limit" type="integer" default="20">
-  Number of results per page (1-200)
+  Number of results per page (1-200).
 </ParamField>
 
 <ParamField query="timeframe" type="string">
-  Time window for metrics. Options: `1d`, `3d`, `7d`, `14d`, `30d`, `all`
-  
-  Example: `30d` for 30-day metrics
+  Time window for metrics. Options: `1d`, `3d`, `7d`, `14d`, `30d`, `all`.
 </ParamField>
 
 <ParamField query="sort" type="string">
@@ -33,36 +31,33 @@ Retrieve a paginated list of channels with advanced sorting options by various p
 </ParamField>
 
 <ParamField query="order" type="string" default="desc">
-  Sort direction: `asc` or `desc`
+  Sort direction: `asc` or `desc`.
 </ParamField>
 
 ## Response
 
 <ResponseField name="channels" type="array">
-  Array of channel objects
+  An array of [Channel](/api-reference/models/channel-models#channel) objects.
 </ResponseField>
 
 <ResponseField name="totalChannels" type="integer">
-  Total number of channels available
+  Total number of channels available that match the criteria.
 </ResponseField>
 
 <ResponseField name="totalPages" type="integer">
-  Total number of pages
+  Total number of pages available.
 </ResponseField>
 
 <ResponseField name="currentPage" type="integer">
-  Current page number
+  The current page number.
 </ResponseField>
 
 ## Example Request
 
 <CodeGroup>
-
 ```bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels?page=1&limit=10&timeframe=30d&sort=win_rate&order=desc"
-```
-
-```python Python
+``````python Python
 import requests
 
 response = requests.get(
@@ -75,11 +70,8 @@ response = requests.get(
         "order": "desc"
     }
 )
-
 data = response.json()
-```
-
-```javascript JavaScript
+``````javascript JavaScript
 const params = new URLSearchParams({
   page: 1,
   limit: 10,
@@ -91,14 +83,13 @@ const params = new URLSearchParams({
 const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/channels?${params}`
 );
-
 const data = await response.json();
 ```
-
 </CodeGroup>
 
 ## Example Response
 
+*For a detailed breakdown of the object structure in the `channels` array, see the [Channel model](/api-reference/models/channel-models#channel).*
 ```json
 {
   "channels": [
@@ -119,24 +110,6 @@ const data = await response.json();
       "x5_rate": "22.5",
       "x10_rate": "12.3",
       "last_updated": "2025-01-15T12:00:00Z"
-    },
-    {
-      "channel_id": "@GemHunters",
-      "username": "GemHunters",
-      "name": "Gem Hunters",
-      "link": "https://t.me/GemHunters",
-      "subscriber_count": 180000,
-      "profile_photo_url": "https://example.com/photo2.jpg",
-      "platform": "telegram",
-      "calls_analyzed": 980,
-      "win_rate": "78.5",
-      "avg_gain": "245.8",
-      "total_calls_30d": 48,
-      "win_rate_30d": "80.2",
-      "avg_gain_30d": "298.5",
-      "x5_rate": "18.7",
-      "x10_rate": "9.5",
-      "last_updated": "2025-01-15T11:45:00Z"
     }
   ],
   "totalChannels": 500,
@@ -153,16 +126,14 @@ const data = await response.json();
 | `avg_gain` | Average percentage gain across all calls |
 | `subscriber_count` | Number of channel subscribers |
 | `total_calls` | Total number of calls analyzed |
-| `x5_rate` | Percentage of calls that achieved 5x returns |
-| `x10_rate` | Percentage of calls that achieved 10x returns |
 
 ## Timeframe Options
 
 | Timeframe | Description |
 |-----------|-------------|
-| `1d` | Last day metrics |
-| `3d` | Last 3 days metrics |
-| `7d` | Last 7 days metrics |
-| `14d` | Last 14 days metrics |
-| `30d` | Last 30 days metrics |
-| `all` | All-time metrics |
+| `1d` | Last 24 hours |
+| `3d` | Last 3 days |
+| `7d` | Last 7 days |
+| `14d`| Last 14 days |
+| `30d`| Last 30 days |
+| `all`| All-time metrics |

@@ -75,26 +75,6 @@ For endpoints returning a single detailed resource, the response is the object i
 type SingleItemResponse = ChannelInfo | TokenResponse;
 ```
 
-## Pagination
-
-### Request Parameters
-
-```typescript
-interface PaginationParams {
-  page?: number;    // Page number (starts at 1)
-  limit?: number;   // Items per page (varies by endpoint)
-}
-```
-
-### Pagination Limits by Endpoint
-
-| Endpoint | Default `limit` | Max `limit` |
-|----------|--------------|-----------|
-| `/api/channels` | 20 | 200 |
-| `/api/channels/{id}/calls` | 20 | 500 |
-| `/api/tokens/recent` | 10 | 100 |
-| `/api/tokens/most-called` | 15 | 200 |
-
 ## Error Responses
 
 ### Error Response Structure
@@ -122,17 +102,6 @@ interface ErrorResponse {
 | `INTERNAL_ERROR` | 500 | An unexpected error occurred on the server. |
 | `SERVICE_UNAVAILABLE` | 503 | The service is temporarily unavailable, e.g., for maintenance. |
 
-### Error Response Example (429 Rate Limited)
-```json
-{
-  "error": {
-    "code": "RATE_LIMITED",
-    "message": "Rate limit exceeded. Please try again later.",
-    "retry_after": 60
-  }
-}
-```
-
 ## HTTP Status Codes
 
 | Status | Category | Description |
@@ -143,23 +112,11 @@ interface ErrorResponse {
 | `429 Too Many Requests`| **Client Error** | You have hit the rate limit. |
 | `500 Internal Server Error`| **Server Error** | Something went wrong on our end. |
 
-## Response Headers
-
-### Rate Limit Headers
-
-Monitor these headers to manage your request rate and avoid 429 errors.
-
-| Header | Description |
-|---|---|
-| `X-RateLimit-Limit` | The maximum number of requests allowed in the current time window. |
-| `X-RateLimit-Remaining` | The number of requests remaining in the current window. |
-| `X-RateLimit-Reset` | The Unix timestamp (in seconds) when the rate limit window resets. |
-
 ## Best Practices
 
 ### 1. Always Check Response Status
 
-Before parsing the JSON, verify that the HTTP response status is successful (e.g., `response.ok` in JavaScript).
+Before parsing the JSON, verify that the HTTP response status is successful.
 
 ```javascript
 const response = await fetch(url);
@@ -175,35 +132,40 @@ const data = await response.json();
 
 ### 2. Handle Pagination Dynamically
 
-Don't assume a fixed number of pages. Use the `totalPages` or `total_pages` field from the response to determine if more data is available.
+Use the `totalPages` or `total_pages` field from the response to fetch all data.
 
 ```python
-def fetch_all_calls(channel_id: str):
-    """Fetches all pages of a channel's calls."""
-    all_calls = []
+def fetch_all_paginated_data(endpoint_url: str, data_key: str):
+    """Fetches all pages of data from a given endpoint."""
+    all_items = []
     page = 1
     
     while True:
-        response = requests.get(
-            f"https://prod.api.sauron.outlight.fun/api/channels/{channel_id}/calls",
-            params={'page': page, 'limit': 500} # Use max limit
-        )
+        response = requests.get(endpoint_url, params={'page': page, 'limit': 200})
         response.raise_for_status()
         data = response.json()
         
-        all_calls.extend(data.get('calls', []))
+        all_items.extend(data.get(data_key, []))
         
-        if page >= data['totalPages']:
+        total_pages = data.get('totalPages') or data.get('total_pages', 1)
+        if page >= total_pages:
             break
             
         page += 1
     
-    return all_calls
-```
+    return all_items
+
+# Example usage:
+# all_calls = fetch_all_paginated_data(
+#     "https://.../api/channels/@some/calls", "calls"
+# )
+# recent_tokens = fetch_all_paginated_data(
+#     "https://.../api/tokens/recent", "data"
+# )```
 
 ### 3. Implement Retry Logic for Rate Limits
 
-When you receive a `429` status code, wait for the duration specified in the `retry_after` field of the error response or the `Retry-After` header before trying again.
+When you receive a `429` status code, wait for the specified duration before retrying.
 
 ```typescript
 async function fetchWithRetry(url: string, maxRetries: number = 3): Promise<any> {
@@ -215,7 +177,7 @@ async function fetchWithRetry(url: string, maxRetries: number = 3): Promise<any>
       const retryAfter = error.error.retry_after || 60;
       console.log(`Rate limited. Retrying in ${retryAfter} seconds...`);
       await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
-      continue; // Retry the loop
+      continue;
     }
     
     if (!response.ok) {

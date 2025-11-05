@@ -1,68 +1,66 @@
 ---
-title: Welcome to Outlight.fun API
-description: 'Comprehensive API for tracking and analyzing crypto token calls across social media channels'
+title: 'Welcome to the Outlight.fun API'
+description: 'Track and analyze cryptocurrency token calls across social media channels.'
 ---
 
 ## Introduction
 
-Welcome to the Outlight.fun API documentation. Our API provides powerful tools for tracking and analyzing cryptocurrency token calls across various social media channels including Telegram and Twitter.
+Welcome! The Outlight.fun API gives you programmatic access to a powerful engine for tracking and analyzing cryptocurrency token calls across Telegram and Twitter. Use our data to build sophisticated trading tools, monitoring bots, or analytics dashboards and gain a competitive edge in the fast-paced world of crypto.
 
-## Key Features
+## How to Get Started
+
+Ready to dive in? Our quickstart guide will walk you through making your first API call in less than 5 minutes.
+
+<Card title="Start with the Quickstart Guide" icon="rocket" href="/introduction/quickstart">
+  Your first API call is just a copy-paste away. No authentication required!
+</Card>
+
+## What You Can Build
 
 <CardGroup cols={2}>
   <Card
-    title="Channel Analytics"
+    title="Analyze Channel Performance"
     icon="chart-line"
-    href="/api-reference/channels/search-channels"
+    href="/api-reference/channels/list-channels"
   >
-    Track and analyze channel performance metrics, win rates, and gain statistics
+    Track channel win rates, average gains, and call frequency over various timeframes.
   </Card>
   <Card
-    title="Token Tracking"
+    title="Track Trending Tokens"
     icon="coins"
-    href="/api-reference/tokens/search-tokens"
+    href="/api-reference/tokens/most-called-tokens"
   >
-    Monitor token calls, FDV changes, and performance across multiple channels
+    Identify tokens gaining traction by monitoring which are being called by the most channels.
   </Card>
   <Card
-    title="Real-time Data"
+    title="Access Real-Time Data"
     icon="bolt"
-    href="/api-reference/introduction"
+    href="/api-reference/tokens/recent-tokens"
   >
-    Access up-to-date information on calls, gains, and market movements
+    Get an up-to-the-minute feed of the latest token calls as they happen.
   </Card>
   <Card
-    title="Historical Analysis"
+    title="Perform Historical Analysis"
     icon="clock"
-    href="/api-reference/models/channel"
+    href="/api-reference/channels/channel-details"
   >
-    Review historical performance data with multiple timeframe options
+    Review a channel's complete call history to assess its long-term performance.
   </Card>
 </CardGroup>
 
-## Base URL
-
-```
-https://prod.api.sauron.outlight.fun
-```
-
-## API Version
-
-Current version: `1.0.0`
-
-## Quick Links
+## Explore the Documentation
 
 <CardGroup cols={2}>
-  <Card title="Quickstart Guide" icon="rocket" href="/introduction/quickstart">
-    Get up and running with the Outlight API in minutes
+  <Card title="API Introduction" icon="book-open" href="/api-reference/introduction">
+    Get a high-level overview of API concepts and structure.
   </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/introduction">
-    Explore all available endpoints and parameters
+  <Card title="Full API Reference" icon="code" href="/api-reference/channels/search-channels">
+    Explore all available endpoints and their parameters.
   </Card>
-  <Card title="Data Models" icon="database" href="/api-reference/models/channel">
-    Understand the structure of API responses
+  <Card title="Data Models" icon="database" href="/api-reference/models/channel-models">
+    Understand the structure of all response objects.
   </Card>
-  <Card title="Authentication" icon="shield" href="/api-reference/authentication">
-    Learn about API authentication and security
+  <Card title="Authentication & Rate Limiting" icon="shield" href="/api-reference/authentication">
+    Learn how to handle rate limits and best practices.
   </Card>
 </CardGroup>
