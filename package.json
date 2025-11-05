@@ -1,7 +1,7 @@
 {
   "name": "outlight-api-docs",
   "version": "1.0.0",
-  "description": "Mintlify documentation for Outlight API",
+  "description": "Mintlify documentation for Outlight.fun API",
   "scripts": {
     "dev": "mintlify dev",
     "build": "mintlify build",
@@ -17,7 +17,7 @@
     "tokens",
     "channels"
   ],
-  "author": "Outlight",
+  "author": "Outlight.fun",
   "license": "MIT",
   "devDependencies": {
     "mintlify": "^4.0.0"
