@@ -35,7 +35,7 @@ Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 
 ```typescript
 interface RecentToken extends TokenSearchResult {
-  chain: "solana" | "bsc" | "ethereum" | "polygon" | "arbitrum" | "avalanche";
+  chain: "solana" | "bsc";
   ath: number;
   most_recent_call: string;
   channel_calls: RecentTokenChannelCall[];
@@ -181,7 +181,7 @@ Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 
 ```typescript
 interface RecentToken extends TokenSearchResult {
-  chain: "solana" | "bsc" | "ethereum" | "polygon" | "arbitrum" | "avalanche";
+  chain: "solana" | "bsc";
   ath: number;
   most_recent_call: string;
   channel_calls: RecentTokenChannelCall[];
