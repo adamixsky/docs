@@ -21,7 +21,7 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
 ## Response
 
 <ResponseField name="data" type="array">
-  Array of recent token objects
+  Array of recent token objects.
   
   <Expandable title="Recent Token Object">
     <ResponseField name="address" type="string">
@@ -36,7 +36,7 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
       Token symbol
     </ResponseField>
     
-    <ResponseField name="logo_url" type="string">
+    <ResponseField name="logo_url" type="string | null">
       URL to token logo
     </ResponseField>
     
@@ -44,18 +44,18 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
       Blockchain network (e.g., "solana", "bsc")
     </ResponseField>
     
-    <ResponseField name="current_fdv" type="string">
+    <ResponseField name="current_fdv" type="number">
       Current fully diluted valuation
     </ResponseField>
-    
-    <ResponseField name="ath" type="string">
+
+    <ResponseField name="ath" type="number">
       All-time high FDV value
     </ResponseField>
     
     <ResponseField name="sufficient_liquidity" type="boolean">
       Whether token has sufficient liquidity
     </ResponseField>
-    
+
     <ResponseField name="unique_channels" type="integer">
       Number of unique channels that called this token
     </ResponseField>
@@ -63,29 +63,49 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
     <ResponseField name="total_subscribers" type="integer">
       Combined subscriber count
     </ResponseField>
-    
-    <ResponseField name="call_count" type="integer">
-      Total number of calls
-    </ResponseField>
-    
+
     <ResponseField name="most_recent_call" type="string">
       ISO 8601 timestamp of most recent call
     </ResponseField>
     
     <ResponseField name="channel_calls" type="array">
-      List of channels that called this token with details
+      List of recent calls from different channels.
+      
+      <Expandable title="Channel Call Object">
+        <ResponseField name="id" type="number">Unique call ID</ResponseField>
+        <ResponseField name="channel_id" type="string">Calling channel's ID</ResponseField>
+        <ResponseField name="channel_name" type="string">Calling channel's name</ResponseField>
+        <ResponseField name="subscriber_count" type="number">Channel's subscriber count</ResponseField>
+        <ResponseField name="profile_photo_url" type="string">Channel's profile photo</ResponseField>
+        <ResponseField name="channel_link" type="string">Link to the channel</ResponseField>
+        <ResponseField name="message_id" type="number">ID of the call message</ResponseField>
+        <ResponseField name="message_link" type="string">Link to the call message</ResponseField>
+        <ResponseField name="fdv_at_call" type="number">FDV at time of call</ResponseField>
+        <ResponseField name="highest_fdv" type="number">Highest FDV since call</ResponseField>
+        <ResponseField name="lowest_fdv" type="number">Lowest FDV since call</ResponseField>
+        <ResponseField name="highest_fdv_at" type="string">Timestamp of highest FDV</ResponseField>
+        <ResponseField name="lowest_fdv_at" type="string">Timestamp of lowest FDV</ResponseField>
+        <ResponseField name="called_at" type="string">Timestamp of the call</ResponseField>
+        <ResponseField name="win_rate" type="number">Channel's win rate</ResponseField>
+        <ResponseField name="avg_gain" type="number">Channel's average gain</ResponseField>
+        <ResponseField name="platform" type="string">Platform of the channel</ResponseField>
+      </Expandable>
     </ResponseField>
     
-    <ResponseField name="website" type="string">
+    <ResponseField name="website" type="string | null">
       Token website URL
     </ResponseField>
     
-    <ResponseField name="telegram_link" type="string">
+    <ResponseField name="telegram_link" type="string | null">
       Telegram community link
     </ResponseField>
     
-    <ResponseField name="twitter_link" type="string">
+    <ResponseField name="twitter_link" type="string | null">
       Twitter/X account link
+    </ResponseField>
+
+    <ResponseField name="last_updated" type="string">
+      ISO 8601 timestamp of last data update
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -109,12 +129,9 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
 ## Example Request
 
 <CodeGroup>
-
 ```bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/recent?page=1&limit=5"
-```
-
-```python Python
+``````python Python
 import requests
 
 response = requests.get(
@@ -126,9 +143,7 @@ response = requests.get(
 )
 
 data = response.json()
-```
-
-```javascript JavaScript
+``````javascript JavaScript
 const params = new URLSearchParams({
   page: 1,
   limit: 5
@@ -140,7 +155,6 @@ const response = await fetch(
 
 const data = await response.json();
 ```
-
 </CodeGroup>
 
 ## Example Response
@@ -149,66 +163,48 @@ const data = await response.json();
 {
   "data": [
     {
-      "address": "0x9876543210fedcba9876543210fedcba98765432",
-      "name": "Rocket Token",
-      "symbol": "ROCKET",
-      "logo_url": "https://example.com/rocket-logo.png",
+      "address": "3xf7ucN6EUz56zka84UFbeQ3MQLHm3EVGnyLP7L7G5JV",
+      "name": "Trump Bucks",
+      "symbol": "TUSD",
+      "logo_url": "https://dd.dexscreener.com/ds-data/tokens/solana/3xf7ucN6EUz56zka84UFbeQ3MQLHm3EVGnyLP7L7G5JV.png?key=c2d065",
+      "current_fdv": 64255.4901085775,
+      "website": null,
+      "telegram_link": null,
+      "twitter_link": "https://x.com/SolportTom/status/1986106106456989858",
+      "last_updated": "2025-11-05T17:29:47.491Z",
+      "sufficient_liquidity": true,
       "chain": "solana",
-      "current_fdv": "8500000",
-      "ath": "12000000",
-      "sufficient_liquidity": true,
-      "unique_channels": 12,
-      "total_subscribers": 650000,
-      "call_count": 28,
-      "most_recent_call": "2025-01-15T16:45:00Z",
+      "most_recent_call": "2025-11-05T17:29:46.000Z",
+      "unique_channels": 16,
+      "total_subscribers": 51788,
+      "ath": 129166,
       "channel_calls": [
         {
-          "channel_id": "@CryptoAlpha",
-          "channel_name": "Crypto Alpha",
-          "called_at": "2025-01-15T16:45:00Z",
-          "gain": 250
-        },
-        {
-          "channel_id": "@GemFinder",
-          "channel_name": "Gem Finder",
-          "called_at": "2025-01-15T14:30:00Z",
-          "gain": 180
+          "id": 3592885,
+          "channel_id": "@tigers_callz",
+          "channel_name": "TIGERS CALLS",
+          "subscriber_count": 5140,
+          "profile_photo_url": "https://cdn5.telesco.pe/file/...",
+          "channel_link": "https://t.me/tigers_callz",
+          "message_id": 5155,
+          "message_link": "https://t.me/tigers_callz/5155",
+          "fdv_at_call": 64255.4901085775,
+          "highest_fdv": 64255.4901085775,
+          "lowest_fdv": 64255.4901085775,
+          "highest_fdv_at": "2025-11-05T17:29:46.000Z",
+          "lowest_fdv_at": "2025-11-05T17:29:46.000Z",
+          "called_at": "2025-11-05T17:29:46.000Z",
+          "win_rate": 33,
+          "avg_gain": 81,
+          "platform": "telegram"
         }
-      ],
-      "website": "https://rockettoken.io",
-      "telegram_link": "https://t.me/rockettoken",
-      "twitter_link": "https://twitter.com/rockettoken"
-    },
-    {
-      "address": "0xfedcba9876543210fedcba9876543210fedcba98",
-      "name": "Neptune Protocol",
-      "symbol": "NEPT",
-      "logo_url": "https://example.com/neptune-logo.png",
-      "chain": "bsc",
-      "current_fdv": "4200000",
-      "ath": "5500000",
-      "sufficient_liquidity": true,
-      "unique_channels": 8,
-      "total_subscribers": 380000,
-      "call_count": 15,
-      "most_recent_call": "2025-01-15T15:30:00Z",
-      "channel_calls": [
-        {
-          "channel_id": "@BSCGems",
-          "channel_name": "BSC Gems",
-          "called_at": "2025-01-15T15:30:00Z",
-          "gain": 120
-        }
-      ],
-      "website": "https://neptuneprotocol.com",
-      "telegram_link": "https://t.me/neptuneprotocol",
-      "twitter_link": "https://twitter.com/neptunedefi"
+      ]
     }
   ],
   "page": 1,
   "limit": 5,
-  "total": 250,
-  "total_pages": 50
+  "total": 6960,
+  "total_pages": 348
 }
 ```
 
@@ -225,7 +221,7 @@ const data = await response.json();
 
 ## Notes
 
-- Tokens are sorted by most recent call date (newest first)
-- The `channel_calls` array provides a summary of recent calls from different channels
-- `ath` (All-Time High) represents the highest FDV the token has reached
-- Results include tokens from multiple blockchain networks
+- Tokens are sorted by the `most_recent_call` date (newest first).
+- The `channel_calls` array provides a detailed summary of recent calls from different channels.
+- `ath` (All-Time High) represents the highest FDV the token has reached.
+```
