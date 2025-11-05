@@ -1,12 +1,12 @@
 ---
-title: 'Channel Details'
-api: 'GET /api/channels/{channelId}/info'
-description: 'Get detailed information and statistics for a specific channel'
+title: "Channel Details"
+api: "GET /api/channels/{channelId}/info"
+description: "Get detailed information and statistics for a specific channel"
 ---
 
 ## Overview
 
-Retrieve comprehensive information about a specific channel including detailed statistics for multiple timeframes. The response provides a flat structure with performance metrics suffixed by their respective time periods (e.g., _1d, _7d, _all).
+Retrieve comprehensive information about a specific channel including detailed statistics for multiple timeframes. The response provides a flat structure with performance metrics suffixed by their respective time periods (e.g., \_1d, \_7d, \_all).
 
 ## Request
 
@@ -48,29 +48,85 @@ Retrieve comprehensive information about a specific channel including detailed s
   Number of calls that have been fully analyzed
 </ResponseField>
 
-<ResponseField name="total_calls_1d" type="integer">Total calls in the last 24 hours</ResponseField>
-<ResponseField name="total_calls_3d" type="integer">Total calls in the last 3 days</ResponseField>
-<ResponseField name="total_calls_7d" type="integer">Total calls in the last 7 days</ResponseField>
-<ResponseField name="total_calls_14d" type="integer">Total calls in the last 14 days</ResponseField>
-<ResponseField name="total_calls_30d" type="integer">Total calls in the last 30 days</ResponseField>
-<ResponseField name="total_calls_all" type="integer">Total calls of all time</ResponseField>
+<ResponseField name="total_calls_1d" type="integer">
+  Total calls in the last 24 hours
+</ResponseField>
 
-<ResponseField name="win_rate_1d" type="number">Win rate for the last 24 hours</ResponseField>
-<ResponseField name="win_rate_3d" type="number">Win rate for the last 3 days</ResponseField>
-<ResponseField name="win_rate_7d" type="number">Win rate for the last 7 days</ResponseField>
-<ResponseField name="win_rate_14d" type="number">Win rate for the last 14 days</ResponseField>
-<ResponseField name="win_rate_30d" type="number">Win rate for the last 30 days</ResponseField>
-<ResponseField name="win_rate_all" type="number">Win rate for all time</ResponseField>
+<ResponseField name="total_calls_3d" type="integer">
+  Total calls in the last 3 days
+</ResponseField>
 
-<ResponseField name="avg_gain_1d" type="number">Average gain for the last 24 hours</ResponseField>
-<ResponseField name="avg_gain_3d" type="number">Average gain for the last 3 days</ResponseField>
-<ResponseField name="avg_gain_7d" type="number">Average gain for the last 7 days</ResponseField>
-<ResponseField name="avg_gain_14d" type="number">Average gain for the last 14 days</ResponseField>
-<ResponseField name="avg_gain_30d" type="number">Average gain for the last 30 days</ResponseField>
-<ResponseField name="avg_gain_all" type="number">Average gain for all time</ResponseField>
+<ResponseField name="total_calls_7d" type="integer">
+  Total calls in the last 7 days
+</ResponseField>
 
-<ResponseField name="x5_rate_all" type="number">Percentage of calls achieving 5x returns (all time)</ResponseField>
-<ResponseField name="x10_rate_all" type="number">Percentage of calls achieving 10x returns (all time)</ResponseField>
+<ResponseField name="total_calls_14d" type="integer">
+  Total calls in the last 14 days
+</ResponseField>
+
+<ResponseField name="total_calls_30d" type="integer">
+  Total calls in the last 30 days
+</ResponseField>
+
+<ResponseField name="total_calls_all" type="integer">
+  Total calls of all time
+</ResponseField>
+
+<ResponseField name="win_rate_1d" type="number">
+  Win rate for the last 24 hours
+</ResponseField>
+
+<ResponseField name="win_rate_3d" type="number">
+  Win rate for the last 3 days
+</ResponseField>
+
+<ResponseField name="win_rate_7d" type="number">
+  Win rate for the last 7 days
+</ResponseField>
+
+<ResponseField name="win_rate_14d" type="number">
+  Win rate for the last 14 days
+</ResponseField>
+
+<ResponseField name="win_rate_30d" type="number">
+  Win rate for the last 30 days
+</ResponseField>
+
+<ResponseField name="win_rate_all" type="number">
+  Win rate for all time
+</ResponseField>
+
+<ResponseField name="avg_gain_1d" type="number">
+  Average gain for the last 24 hours
+</ResponseField>
+
+<ResponseField name="avg_gain_3d" type="number">
+  Average gain for the last 3 days
+</ResponseField>
+
+<ResponseField name="avg_gain_7d" type="number">
+  Average gain for the last 7 days
+</ResponseField>
+
+<ResponseField name="avg_gain_14d" type="number">
+  Average gain for the last 14 days
+</ResponseField>
+
+<ResponseField name="avg_gain_30d" type="number">
+  Average gain for the last 30 days
+</ResponseField>
+
+<ResponseField name="avg_gain_all" type="number">
+  Average gain for all time
+</ResponseField>
+
+<ResponseField name="x5_rate_all" type="number">
+  Percentage of calls achieving 5x returns (all time)
+</ResponseField>
+
+<ResponseField name="x10_rate_all" type="number">
+  Percentage of calls achieving 10x returns (all time)
+</ResponseField>
 
 <ResponseField name="unique_tokens" type="integer">
   Number of unique tokens called
@@ -119,7 +175,8 @@ Retrieve comprehensive information about a specific channel including detailed s
 ## Example Request
 
 <CodeGroup>
-```bash cURL
+
+```````bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@AltcoinGordon/info"
 ``````python Python
 import requests
@@ -137,10 +194,11 @@ const response = await fetch(
 );
 
 const data = await response.json();
-```
+```````
+
 </CodeGroup>
 
-##Example Response
+## Example Response
 
 ```json
 {
@@ -183,7 +241,8 @@ const data = await response.json();
   "rds_score": null,
   "status": "pending"
 }
-Metrics Explained
+
+## Metrics Explained
 Metric	Description
 win_rate	Percentage of profitable calls
 avg_gain	Average percentage gain across calls
@@ -195,3 +254,4 @@ profit_risk_ratio	Ratio of potential profit to risk
 rds_score	Overall channel performance score
 survival_rate_percent	Token survival rate
 time_to_ath_minutes	Average time to peak value
+```
