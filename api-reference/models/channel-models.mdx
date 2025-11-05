@@ -130,8 +130,3 @@ interface ChannelCall {
   total_subscribers: string;
 }
 ```
-
-<Note>
-  **Data Precision**: In the `ChannelCall` model, fields such as `fdv_at_call`, `highest_fdv`, `current_gain`, and `highest_gain` are returned as strings to maintain high precision for decimal values. It is recommended to parse them into a high-precision number type (like `Decimal.js` or `Big.js`) on the client-side for any financial calculations.
-</Note>
-```
