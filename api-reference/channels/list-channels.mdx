@@ -19,7 +19,7 @@ Retrieve a paginated list of channels with advanced sorting options by various p
 </ParamField>
 
 <ParamField query="timeframe" type="string">
-  Time window for metrics. Options: `1h`, `24h`, `7d`, `30d`
+  Time window for metrics. Options: `1d`, `3d`, `7d`, `14d`, `30d`, `all`
   
   Example: `30d` for 30-day metrics
 </ParamField>
@@ -160,8 +160,9 @@ const data = await response.json();
 
 | Timeframe | Description |
 |-----------|-------------|
-| `1h` | Last hour metrics |
-| `24h` | Last 24 hours metrics |
+| `1d` | Last day metrics |
+| `3d` | Last 3 days metrics |
 | `7d` | Last 7 days metrics |
+| `14d` | Last 14 days metrics |
 | `30d` | Last 30 days metrics |
 | `all` | All-time metrics |
