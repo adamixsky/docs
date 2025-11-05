@@ -200,7 +200,7 @@ const data = await response.json();
 
 ## Example Response
 
-```json
+````json
 {
   "channel_id": "@AltcoinGordon",
   "username": "AltcoinGordon",
@@ -240,18 +240,20 @@ const data = await response.json();
   "intelligent_sl": null,
   "rds_score": null,
   "status": "pending"
-}
+}```
 
 ## Metrics Explained
-Metric	Description
-win_rate	Percentage of profitable calls
-avg_gain	Average percentage gain across calls
-x5_rate	Percentage achieving 5x returns
-x10_rate	Percentage achieving 10x returns
-intelligent_sl	Suggested stop-loss percentage
-intelligent_tp	Suggested take-profit percentage
-profit_risk_ratio	Ratio of potential profit to risk
-rds_score	Overall channel performance score
-survival_rate_percent	Token survival rate
-time_to_ath_minutes	Average time to peak value
-```
+
+| Metric | Description |
+|--------|-------------|
+| `win_rate` | Percentage of profitable calls |
+| `avg_gain` | Average percentage gain across calls |
+| `x5_rate` | Percentage achieving 5x returns |
+| `x10_rate` | Percentage achieving 10x returns |
+| `intelligent_sl` | Suggested stop-loss percentage |
+| `intelligent_tp` | Suggested take-profit percentage |
+| `profit_risk_ratio` | Ratio of potential profit to risk |
+| `rds_score` | Overall channel performance score |
+| `survival_rate_percent` | Token survival rate |
+| `time_to_ath_minutes` | Average time to peak value |
+````
