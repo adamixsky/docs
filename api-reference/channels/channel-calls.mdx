@@ -1,7 +1,7 @@
 ---
-title: 'Channel Calls'
-api: 'GET /api/channels/{channelId}/calls'
-description: 'Get list of tokens called by a specific channel'
+title: "Channel Calls"
+api: "GET /api/channels/{channelId}/calls"
+description: "Get list of tokens called by a specific channel"
 ---
 
 ## Overview
@@ -14,16 +14,17 @@ Retrieve a list of all tokens that have been called by a specific channel, with 
   Channel username (with or without "@" prefix, e.g., "@MontyAlerts")
 </ParamField>
 
-<ParamField query="page" type="integer" default="1">
+<ParamField query="page" default="1" type="integer">
   Page number (starting from 1)
 </ParamField>
 
-<ParamField query="limit" type="integer" default="20">
+<ParamField query="limit" default="20" type="integer">
   Number of results per page (1-500)
 </ParamField>
 
 <ParamField query="sort" type="string">
   Sort field options:
+
   - `called_at` - Date of call
   - `highest_gain` - Maximum gain achieved
   - `current_gain` - Current gain
@@ -31,132 +32,34 @@ Retrieve a list of all tokens that have been called by a specific channel, with 
   - `fdv_at_call` - FDV at time of call
 </ParamField>
 
-<ParamField query="order" type="string" default="desc">
+<ParamField query="order" default="desc" type="string">
   Sort direction: `asc` or `desc`
 </ParamField>
 
 ## Response
 
 <ResponseField name="calls" type="array">
-  Array of channel call objects.
-  
-  <Expandable title="Call Object">
-    <ResponseField name="id" type="number">
-      Unique call identifier
-    </ResponseField>
-    
-    <ResponseField name="channel_id" type="string">
-      Channel identifier
-    </ResponseField>
-    
-    <ResponseField name="token_address" type="string">
-      Token contract address
-    </ResponseField>
-
-    <ResponseField name="token_name" type="string">
-      Token name
-    </ResponseField>
-    
-    <ResponseField name="token_symbol" type="string">
-      Token symbol
-    </ResponseField>
-    
-    <ResponseField name="token_logo_url" type="string">
-      URL to token logo
-    </ResponseField>
-
-    <ResponseField name="message_id" type="string">
-      Message identifier
-    </ResponseField>
-    
-    <ResponseField name="message_link" type="string">
-      Link to original message
-    </ResponseField>
-    
-    <ResponseField name="message_content" type="string">
-      Message text content
-    </ResponseField>
-
-    <ResponseField name="message_html" type="string">
-      Message HTML content
-    </ResponseField>
-    
-    <ResponseField name="called_at" type="string">
-      ISO 8601 timestamp of call
-    </ResponseField>
-    
-    <ResponseField name="fdv_at_call" type="string">
-      FDV at time of call
-    </ResponseField>
-
-    <ResponseField name="current_fdv" type="string">
-      Current FDV of the token
-    </ResponseField>
-    
-    <ResponseField name="highest_fdv" type="string">
-      Highest FDV reached since the call
-    </ResponseField>
-
-    <ResponseField name="highest_fdv_at" type="string">
-      Timestamp when the highest FDV was reached
-    </ResponseField>
-    
-    <ResponseField name="lowest_fdv" type="string">
-      Lowest FDV reached since the call
-    </ResponseField>
-    
-    <ResponseField name="lowest_fdv_at" type="string">
-      Timestamp when the lowest FDV was reached
-    </ResponseField>
-
-    <ResponseField name="current_gain" type="string">
-      Current gain percentage (string for precision)
-    </ResponseField>
-    
-    <ResponseField name="highest_gain" type="string">
-      Highest gain percentage achieved (string for precision)
-    </ResponseField>
-
-    <ResponseField name="website" type="string | null">
-      Token's official website
-    </ResponseField>
-
-    <ResponseField name="telegram_link" type="string | null">
-      Token's Telegram link
-    </ResponseField>
-    
-    <ResponseField name="twitter_link" type="string | null">
-      Token's Twitter/X link
-    </ResponseField>
-
-    <ResponseField name="unique_channels" type="string">
-      Total number of unique channels that have called this token
-    </ResponseField>
-
-    <ResponseField name="total_subscribers" type="string">
-      Total combined subscribers of all channels that called this token
-    </ResponseField>
-  </Expandable>
+  An array of [ChannelCall](/api-reference/models/channel-models#channelcall) objects.
 </ResponseField>
 
 <ResponseField name="totalCalls" type="integer">
-  Total number of calls found
+  Total number of calls found for this channel.
 </ResponseField>
 
 <ResponseField name="totalPages" type="integer">
-  Total number of pages available
+  Total number of pages available.
 </ResponseField>
 
 <ResponseField name="currentPage" type="integer">
-  The current page number
+  The current page number.
 </ResponseField>
 
 ## Example Request
 
 <CodeGroup>
-```bash cURL
-curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@MontyAlerts/calls?page=1&limit=10&sort=highest_gain&order=desc"
-``````python Python
+
+```````bash cURL
+curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@MontyAlerts/calls?page=1&limit=10&sort=highest_gain&order=desc"``````python Python
 import requests
 
 channel_username = "@MontyAlerts"
@@ -185,10 +88,13 @@ const response = await fetch(
 );
 
 const data = await response.json();
-```
+```````
+
 </CodeGroup>
 
 ## Example Response
+
+[_`The structure of the objects in the calls array is defined in the ChannelCall model.`_](/api-reference/models/channel-models#channelcall)
 
 ```json
 {
@@ -201,19 +107,9 @@ const data = await response.json();
       "highest_fdv": "32497.8127056741",
       "message_id": "1955576393514795031",
       "message_link": "https://x.com/MontyAlerts/status/1955576393514795031",
-      "message_content": "🥉 $suscoin\n76FJ2YjVRhtynsM9t4HVa5KiRmHS6NGeBzJwi2t7pump\n📞 6\n\n4. $ORANGE\nfmGLjVuQfBLbWPo5zxc8sSss3ixMW3u3bRP95uGpump\n📞 5\n\n5. $dab\nEc8HpyhXFkGX3uH4kY54QW67YHPrN6ec67NTVY1spump\n📞 4\n\n#SOL #Outlight #TokenCalls\n2/2 https://t.co/agzF0s8NAI",
-      "message_html": "🥉 $suscoin\n76FJ2YjVRhtynsM9t4HVa5KiRmHS6NGeBzJwi2t7pump\n📞 6\n\n4. $ORANGE\nfmGLjVuQfBLbWPo5zxc8sSss3ixMW3u3bRP95uGpump\n📞 5\n\n5. $dab\nEc8HpyhXFkGX3uH4kY54QW67YHPrN6ec67NTVY1spump\n📞 4\n\n#SOL #Outlight #TokenCalls\n2/2 https://t.co/agzF0s8NAI",
       "called_at": "2025-08-13T10:26:25.347Z",
-      "lowest_fdv": "4501.0",
-      "lowest_fdv_at": "2025-08-19T19:12:48.495Z",
-      "highest_fdv_at": "2025-08-13T10:26:25.347Z",
       "token_name": "dab",
       "token_symbol": "dab",
-      "token_logo_url": "https://ipfs.io/ipfs/QmTUvGwj8AJVduYPSHbcAjZfS6MeCXGrvHMoGxXnhNrt78",
-      "current_fdv": "4757.0",
-      "website": null,
-      "telegram_link": null,
-      "twitter_link": "https://x.com/i/communities/1955554496118976974",
       "current_gain": "-85.36209177188891100600",
       "highest_gain": "0.000000000000000000000000",
       "unique_channels": "24",
@@ -224,21 +120,4 @@ const data = await response.json();
   "totalPages": 16,
   "currentPage": 1
 }
-```
-
-## Sort Options
-
-| Sort Field | Description |
-|------------|-------------|
-| `called_at` | Date and time of the call |
-| `highest_gain` | Maximum gain percentage achieved |
-| `current_gain` | Current gain percentage |
-| `highest_fdv` | Highest FDV reached |
-| `fdv_at_call` | FDV at the time of call |
-
-## Notes
-
-- The `channelId` parameter accepts usernames with or without the "@" prefix.
-- FDV and gain values are returned as strings for precision.
-- `unique_channels` and `total_subscribers` refer to the token itself, not just this specific call.
 ```

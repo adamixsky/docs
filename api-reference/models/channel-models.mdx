@@ -123,7 +123,7 @@ interface ChannelInfo {
 | **Metadata** | `status` | string | Analysis status of the channel (e.g., "pending"). |
 | | `updated_at` | string \| null | Timestamp of the last data update. |
 
-## Channel Call
+## ChannelCall
 
 Represents a specific token call made by a channel.
 
@@ -148,6 +148,12 @@ interface ChannelCall {
   lowest_fdv_at: string;
   current_gain: string;
   highest_gain: string;
+  // Pola dotyczące tokena, obecne w tej odpowiedzi:
+  website: string | null;
+  telegram_link: string | null;
+  twitter_link: string | null;
+  unique_channels: string;
+  total_subscribers: string;
 }
 ```
 
