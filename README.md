@@ -185,3 +185,4 @@ This documentation is provided for the Outlight API.
 - [API Base URL](https://prod.api.sauron.outlight.fun)
 - [Mintlify Documentation](https://mintlify.com/docs)
 - [OpenAPI Specification](https://mintlify.com/docs/api-playground/openapi)
+
