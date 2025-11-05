@@ -17,9 +17,9 @@ interface TokenSearchResult {
   name: string;
   symbol: string;
   logo_url: string | null;
-  current_fdv: number; // Corrected: API returns this as a number
+  current_fdv: number; 
   sufficient_liquidity: boolean;
-  chain: string; // Corrected: Added missing field
+  chain: string; 
   unique_channels: number;
   total_subscribers: number;
   call_count: string;
@@ -42,7 +42,7 @@ interface DetailedTokenCall {
   subscriber_count: number;
   profile_photo_url: string;
   channel_link: string;
-  message_id: string; // Corrected: Standardized to string
+  message_id: string; 
   message_link: string;
   fdv_at_call: number;
   highest_fdv: number;
@@ -64,7 +64,7 @@ Detailed token information returned by the `GET /api/tokens/recent` endpoint.
 interface RecentToken extends TokenSearchResult {
   ath: number;
   most_recent_call: string;
-  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+  channel_calls: DetailedTokenCall[]; 
 }
 ```
 
@@ -88,9 +88,9 @@ interface MostCalledToken {
   unique_channels: number;
   total_calls: string;
   last_call_at: string;
-  channel_calls: DetailedTokenCall[]; // Re-uses the detailed model
+  channel_calls: DetailedTokenCall[]; 
   total_subscribers: number;
-  ath: number; // Corrected: Matched to API response type
+  ath: number; 
 }
 ```
 
