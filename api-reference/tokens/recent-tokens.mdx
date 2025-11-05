@@ -1,7 +1,7 @@
 ---
-title: 'Recent Tokens'
-api: 'GET /api/tokens/recent'
-description: 'Get recently called tokens across all channels'
+title: "Recent Tokens"
+api: "GET /api/tokens/recent"
+description: "Get recently called tokens across all channels"
 ---
 
 ## Overview
@@ -10,11 +10,11 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
 
 ## Request
 
-<ParamField query="page" type="integer" default="1">
+<ParamField query="page" default="1" type="integer">
   Page number (starting from 1).
 </ParamField>
 
-<ParamField query="limit" type="integer" default="10">
+<ParamField query="limit" default="10" type="integer">
   Number of results per page (max: 100).
 </ParamField>
 
@@ -43,7 +43,8 @@ Retrieve a list of tokens that have been recently called by channels, sorted by 
 ## Example Request
 
 <CodeGroup>
-```bash cURL
+
+```````bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/tokens/recent?page=1&limit=5"
 ``````python Python
 import requests
@@ -65,12 +66,15 @@ const params = new URLSearchParams({
 const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/tokens/recent?${params}`
 );
-const data = await response.json();```
+const data = await response.json();
+```````
+
 </CodeGroup>
 
 ## Example Response
 
-*For a detailed breakdown of the object structure in the `data` array, see the [RecentToken model](/api-reference/models/token-models#recenttoken).*
+[_`For a detailed breakdown of the object structure in the data array, see the RecentToken model.`_](/api-reference/models/token-models#recenttoken)
+
 ```json
 {
   "data": [
@@ -109,7 +113,7 @@ const data = await response.json();```
 
 The `chain` field indicates the blockchain on which the token is deployed.
 
-| Chain | Description |
-|---|---|
-| `solana` | Solana blockchain |
-| `bsc` | Binance Smart Chain |
+| Chain    | Description         |
+| -------- | ------------------- |
+| `solana` | Solana blockchain   |
+| `bsc`    | Binance Smart Chain |
