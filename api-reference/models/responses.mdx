@@ -1,60 +1,78 @@
 ---
-title: 'Response Models'
-description: 'Common response structures and error handling'
+title: 'Response & Error Models'
+description: 'Common response structures, pagination, and error handling'
 ---
 
 ## Overview
 
-This page documents common response structures, pagination formats, and error handling patterns used across the Outlight API.
+This page documents common response structures, pagination formats, and error handling patterns used across the Outlight API. Understanding these patterns will help you write more robust and predictable code.
 
 ## Standard Response Formats
 
-### Paginated List Response
+### 1. Paginated List Response
 
-Used for endpoints that return lists of items with pagination support.
+Used for endpoints that return lists of items. While the structure is consistent, the specific keys for the data array and total counts vary by endpoint.
 
 ```typescript
+// Generic structure - specific keys differ
 interface PaginatedResponse<T> {
-  data?: T[];           // Some endpoints use 'data'
-  channels?: T[];       // Channel endpoints use 'channels'
-  calls?: T[];          // Call endpoints use 'calls'
+  // Data array - key varies
+  channels?: T[];
+  calls?: T[];
+  data?: T[];
   
   // Pagination metadata
-  totalPages: number;      // Total number of pages
-  currentPage: number;     // Current page number (1-based)
-  total?: number;          // Total number of items
-  totalChannels?: number;  // Total channels (channel endpoints)
-  totalCalls?: number;     // Total calls (call endpoints)
-  count?: number;          // Items in current response
+  currentPage: number;
+  totalPages?: number;    // Used by Channel endpoints
+  total_pages?: number;  // Used by Token endpoints
   
-  // Request context
-  page?: number;           // Requested page
-  limit?: number;          // Items per page
-  timeframe?: string;      // Applied timeframe filter
+  // Total items - key varies
+  totalChannels?: number;
+  totalCalls?: number;
+  total?: number;
 }
 ```
 
-### Search Response
+#### Key Variations by Endpoint
 
-Response format for search endpoints.
+| Endpoint | Data Array Key | Total Items Key | Total Pages Key |
+|---|---|---|---|
+| `/api/channels` | `channels` | `totalChannels` | `totalPages` |
+| `/api/channels/{id}/calls`| `calls` | `totalCalls` | `totalPages` |
+| `/api/tokens/recent` | `data` | `total` | `total_pages` |
+| `/api/tokens/most-called`| `data` | `total` | `total_pages` |
+
+### 2. Search Response
+
+The structure of the search response **differs significantly** between channels and tokens.
+
+#### Channel Search Response (`GET /api/channels/search`)
+
+Returns a wrapper object containing the results array.
 
 ```typescript
-interface SearchResponse<T> {
-  results?: T[];     // Some endpoints return results array
-  channels?: T[];    // Channel search returns channels
-  tokens?: T[];      // Token search may return tokens
-  count: number;     // Number of results found
+interface ChannelSearchResponse {
+  channels: Channel[]; // Array of Channel objects
+  count: number;       // Number of results found
 }
 ```
 
-### Single Item Response
+#### Token Search Response (`GET /api/tokens/search`)
 
-For endpoints returning a single resource.
+Returns a **direct JSON array** of results, without any wrapper object.
 
 ```typescript
-// Direct object response - no wrapper
-// Example: GET /api/channels/{channelId}/info
-type SingleItemResponse = Channel | Token | ChannelInfo | TokenResponse;
+// The response body is the array itself
+type TokenSearchResponse = TokenSearchResult[];
+```
+
+### 3. Single Item Response
+
+For endpoints returning a single detailed resource, the response is the object itself, without any wrapper.
+
+```typescript
+// Example: GET /api/channels/{channelId}/info returns a ChannelInfo object directly.
+type SingleItemResponse = ChannelInfo | TokenResponse;
 ```
 
 ## Pagination
@@ -70,33 +88,18 @@ interface PaginationParams {
 
 ### Pagination Limits by Endpoint
 
-| Endpoint | Default Limit | Max Limit |
+| Endpoint | Default `limit` | Max `limit` |
 |----------|--------------|-----------|
 | `/api/channels` | 20 | 200 |
 | `/api/channels/{id}/calls` | 20 | 500 |
 | `/api/tokens/recent` | 10 | 100 |
 | `/api/tokens/most-called` | 15 | 200 |
 
-### Example Paginated Response
-
-```json
-{
-  "data": [
-    { "id": "1", "name": "Item 1" },
-    { "id": "2", "name": "Item 2" },
-    { "id": "3", "name": "Item 3" }
-  ],
-  "currentPage": 1,
-  "totalPages": 10,
-  "total": 100,
-  "page": 1,
-  "limit": 10
-}
-```
-
 ## Error Responses
 
 ### Error Response Structure
+
+All client (4xx) and server (5xx) errors return a standardized JSON error object.
 
 ```typescript
 interface ErrorResponse {
@@ -104,7 +107,7 @@ interface ErrorResponse {
     code: string;           // Machine-readable error code
     message: string;        // Human-readable error message
     details?: any;          // Additional error details (optional)
-    retry_after?: number;   // Seconds to wait before retry (rate limit)
+    retry_after?: number;   // Seconds to wait before retry (for rate limiting)
   }
 }
 ```
@@ -112,41 +115,14 @@ interface ErrorResponse {
 ### Common Error Codes
 
 | Code | HTTP Status | Description |
-|------|-------------|-------------|
-| `INVALID_PARAMETERS` | 400 | Request parameters are invalid or missing |
-| `RESOURCE_NOT_FOUND` | 404 | Requested resource doesn't exist |
-| `RATE_LIMITED` | 429 | Too many requests, rate limit exceeded |
-| `INTERNAL_ERROR` | 500 | Internal server error |
-| `SERVICE_UNAVAILABLE` | 503 | Service temporarily unavailable |
+|---|---|---|
+| `INVALID_PARAMETERS` | 400 | Request parameters are invalid or missing. |
+| `RESOURCE_NOT_FOUND` | 404 | The requested resource (e.g., a specific channel) doesn't exist. |
+| `RATE_LIMITED` | 429 | Too many requests; rate limit exceeded. |
+| `INTERNAL_ERROR` | 500 | An unexpected error occurred on the server. |
+| `SERVICE_UNAVAILABLE` | 503 | The service is temporarily unavailable, e.g., for maintenance. |
 
-### Error Response Examples
-
-#### 400 Bad Request
-```json
-{
-  "error": {
-    "code": "INVALID_PARAMETERS",
-    "message": "The 'limit' parameter must be between 1 and 200",
-    "details": {
-      "parameter": "limit",
-      "provided": 500,
-      "max": 200
-    }
-  }
-}
-```
-
-#### 404 Not Found
-```json
-{
-  "error": {
-    "code": "RESOURCE_NOT_FOUND",
-    "message": "Channel '@UnknownChannel' not found"
-  }
-}
-```
-
-#### 429 Rate Limited
+### Error Response Example (429 Rate Limited)
 ```json
 {
   "error": {
@@ -159,159 +135,96 @@ interface ErrorResponse {
 
 ## HTTP Status Codes
 
-### Success Codes
-
-| Status | Description | Usage |
-|--------|-------------|-------|
-| 200 | OK | Successful GET request |
-| 201 | Created | Resource successfully created |
-| 204 | No Content | Successful request with no response body |
-
-### Client Error Codes
-
-| Status | Description | Common Causes |
-|--------|-------------|---------------|
-| 400 | Bad Request | Invalid parameters, malformed request |
-| 401 | Unauthorized | Missing or invalid authentication (future) |
-| 403 | Forbidden | Access denied to resource |
-| 404 | Not Found | Resource doesn't exist |
-| 422 | Unprocessable Entity | Valid request but semantic errors |
-| 429 | Too Many Requests | Rate limit exceeded |
-
-### Server Error Codes
-
-| Status | Description | Action |
-|--------|-------------|--------|
-| 500 | Internal Server Error | Retry with exponential backoff |
-| 502 | Bad Gateway | Temporary issue, retry later |
-| 503 | Service Unavailable | Service down for maintenance |
-| 504 | Gateway Timeout | Request took too long, retry |
+| Status | Category | Description |
+|---|---|---|
+| `200 OK` | **Success** | The request was successful. |
+| `400 Bad Request` | **Client Error** | The request was malformed (e.g., invalid parameters). |
+| `404 Not Found` | **Client Error** | The requested resource could not be found. |
+| `429 Too Many Requests`| **Client Error** | You have hit the rate limit. |
+| `500 Internal Server Error`| **Server Error** | Something went wrong on our end. |
 
 ## Response Headers
 
-### Standard Headers
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 1234
-Cache-Control: public, max-age=60
-ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"
-X-Request-Id: 550e8400-e29b-41d4-a716-446655440000
-```
-
 ### Rate Limit Headers
 
-```http
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 95
-X-RateLimit-Reset: 1672531200
-```
+Monitor these headers to manage your request rate and avoid 429 errors.
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | The maximum number of requests allowed in the current time window. |
+| `X-RateLimit-Remaining` | The number of requests remaining in the current window. |
+| `X-RateLimit-Reset` | The Unix timestamp (in seconds) when the rate limit window resets. |
 
 ## Best Practices
 
 ### 1. Always Check Response Status
 
+Before parsing the JSON, verify that the HTTP response status is successful (e.g., `response.ok` in JavaScript).
+
 ```javascript
 const response = await fetch(url);
 
 if (!response.ok) {
-  const error = await response.json();
-  throw new Error(error.error.message);
+  const errorPayload = await response.json();
+  console.error("API Error:", errorPayload.error.message);
+  throw new Error(errorPayload.error.message);
 }
 
 const data = await response.json();
 ```
 
-### 2. Handle Pagination Properly
+### 2. Handle Pagination Dynamically
+
+Don't assume a fixed number of pages. Use the `totalPages` or `total_pages` field from the response to determine if more data is available.
 
 ```python
-def fetch_all_pages(endpoint, params={}):
-    """Fetch all pages of paginated data"""
-    all_data = []
+def fetch_all_calls(channel_id: str):
+    """Fetches all pages of a channel's calls."""
+    all_calls = []
     page = 1
     
     while True:
-        params['page'] = page
-        response = requests.get(endpoint, params=params)
+        response = requests.get(
+            f"https://prod.api.sauron.outlight.fun/api/channels/{channel_id}/calls",
+            params={'page': page, 'limit': 500} # Use max limit
+        )
+        response.raise_for_status()
         data = response.json()
         
-        all_data.extend(data.get('data', []))
+        all_calls.extend(data.get('calls', []))
         
         if page >= data['totalPages']:
             break
             
         page += 1
     
-    return all_data
+    return all_calls
 ```
 
-### 3. Implement Retry Logic
+### 3. Implement Retry Logic for Rate Limits
+
+When you receive a `429` status code, wait for the duration specified in the `retry_after` field of the error response or the `Retry-After` header before trying again.
 
 ```typescript
-async function fetchWithRetry(
-  url: string, 
-  options: RequestInit = {}, 
-  maxRetries: number = 3
-): Promise<Response> {
+async function fetchWithRetry(url: string, maxRetries: number = 3): Promise<any> {
   for (let i = 0; i < maxRetries; i++) {
-    try {
-      const response = await fetch(url, options);
-      
-      if (response.status === 429) {
-        const retryAfter = parseInt(
-          response.headers.get('Retry-After') || '60'
-        );
-        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
-        continue;
-      }
-      
-      return response;
-    } catch (error) {
-      if (i === maxRetries - 1) throw error;
-      
-      // Exponential backoff
-      await new Promise(resolve => 
-        setTimeout(resolve, Math.pow(2, i) * 1000)
-      );
+    const response = await fetch(url);
+    
+    if (response.status === 429) {
+      const error = await response.json();
+      const retryAfter = error.error.retry_after || 60;
+      console.log(`Rate limited. Retrying in ${retryAfter} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+      continue; // Retry the loop
     }
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
   }
   
   throw new Error('Max retries exceeded');
 }
 ```
-
-### 4. Parse Response Carefully
-
-```python
-def safe_parse_response(response):
-    """Safely parse API response"""
-    try:
-        data = response.json()
-        
-        # Check for error response
-        if 'error' in data:
-            raise APIError(
-                code=data['error']['code'],
-                message=data['error']['message']
-            )
-        
-        return data
-    except ValueError:
-        # Response is not JSON
-        raise APIError(
-            code='INVALID_RESPONSE',
-            message='Invalid response format'
-        )
-```
-
-## Response Time Guidelines
-
-Expected response times under normal conditions:
-
-| Endpoint Type | Expected Time | Max Time |
-|--------------|---------------|----------|
-| Search | < 200ms | 1s |
-| List (paginated) | < 300ms | 2s |
-| Single item | < 100ms | 500ms |
-| Complex aggregation | < 500ms | 3s |
