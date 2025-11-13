@@ -21,7 +21,8 @@ The endpoint returns a single [ChannelInfo](/api-reference/models/channel-models
 ## Example Request
 
 <CodeGroup>
-```bash cURL
+
+```````bash cURL
 curl -X GET "https://prod.api.sauron.outlight.fun/api/channels/@adamowicztw/info"
 ``````python Python
 import requests
@@ -37,12 +38,14 @@ const response = await fetch(
   `https://prod.api.sauron.outlight.fun/api/channels/${channelId}/info`
 );
 const data = await response.json();
-```
+```````
+
 </CodeGroup>
 
 ## Example Response
 
-*For a detailed breakdown of the response object structure, see the [ChannelInfo model](/api-reference/models/channel-models#channelinfo).*
+[_For a detailed breakdown of the response object structure, see the ChannelInfo model._](/api-reference/models/channel-models#channelinfo)
+
 ```json
 {
   "channel_id": "@adamowicztw",
@@ -51,29 +54,31 @@ const data = await response.json();
   "platform": "twitter",
   "subscriber_count": 224,
   "calls_analyzed": 8,
-  "total_calls_all": 8,
-  "win_rate_all": 38,
-  "avg_gain_all": 473,
-  "x5_rate_all": 25,
-  "x10_rate_all": 13,
-  "unique_tokens": 8,
-  "last_call_at": "2025-10-02T00:02:09.726Z",
-  "first_call_at": "2025-08-31T16:00:20.744Z",
-  "rds_score": null,
-  "status": "pending",
-  "analytics_by_timeframe": {
-    "30d": {
-      "time_to_ath_minutes": 42237.84,
-      "survival_rate_percent": 100,
-      "profit_risk_ratio": null,
-      "average_gain_percent": 3061.13,
-      "intelligent_tp": 3061.13,
-      "intelligent_sl": -32.69,
-      "rds_score": 100,
-      "channel_style": "batch_ultra_fast",
-      "calculated_at": "2025-10-22T20:24:14.539Z"
-    }
-  }
+  "total_calls": 4,
+  "win_rate": 75,
+  "avg_gain": 279,
+  "x5_rate": 50,
+  "x10_rate": 0,
+  "unique_tokens": 4129,
+  "last_call_at": "2025-11-12T13:11:23.000Z",
+  "first_call_at": "2025-03-01T22:37:04.409Z",
+  "time_to_ath_minutes": 933.12,
+  "survival_rate_percent": 75,
+  "profit_risk_ratio": 1.5,
+  "average_gain_percent": 276.78,
+  "intelligent_tp": 398.63,
+  "intelligent_sl": -74.3,
+  "x_ratio": "2.77",
+  "x_risk": "133.26",
+  "x_power": "0.02",
+  "x_rank": 2,
+  "monty_score": 3,
+  "rds_score": 50,
+  "channel_style": "Standard",
+  "calculated_at": "2025-10-23T10:36:25.514Z",
+  "updated_at": "2025-11-12T13:34:45.209Z",
+  "timeframe_days": 7,
+  "status": "ready"
 }
 ```
 
@@ -81,12 +86,15 @@ const data = await response.json();
 
 The following table explains some of the key performance metrics returned in the `ChannelInfo` object.
 
-| Metric | Description |
-|---|---|
-| `win_rate_all` | Percentage of all-time profitable calls. |
-| `avg_gain_all` | Average percentage gain across all calls. |
-| `x5_rate_all` | Percentage of calls achieving at least 5x returns. |
-| `rds_score` | Risk-Diversification-Success score (0-100). A higher score is better. |
-| `channel_style` | An algorithmic classification of the channel's calling behavior. |
-| `survival_rate_percent` | Percentage of called tokens that maintained their value over a period. |
+| Metric                  | Description                                                               |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `win_rate`              | Percentage of profitable calls.                                           |
+| `avg_gain`              | Average percentage gain across all calls in the chosen timeframe.         |
+| `x5_rate`               | Percentage of calls achieving at least 5x returns.                        |
+| `x10_rate`              | Percentage of calls achieving at least 10x returns.                       |
+| `rds_score`             | Risk-Diversification-Success score (0-100). A higher score is better.     |
+| `channel_style`         | An algorithmic classification of the channel's calling behavior.          |
+| `survival_rate_percent` | Percentage of called tokens that maintained their value over a period.    |
 | `intelligent_sl` / `tp` | Suggested stop-loss and take-profit percentages based on historical data. |
+
+_All of the metrics are calculated from calls that occured within the chosen timeframe. For example '7d' timeframe includes calls from the last 7 days._

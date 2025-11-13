@@ -36,21 +36,6 @@ interface Channel {
 Extended channel information returned by `GET /api/channels/{channelId}/info`. This response contains both a flat structure with basic metrics and a nested object with advanced analytics.
 
 ```typescript
-// Nested object for advanced, calculated analytics
-interface TimeframeAnalytics {
-  time_to_ath_minutes: number;
-  survival_rate_percent: number;
-  profit_risk_ratio: number | null;
-  average_gain_percent: number;
-  intelligent_tp: number;
-  intelligent_sl: number;
-  rds_score: number;
-  channel_style: string;
-  calculated_at: string;
-  updated_at: string;
-  timeframe_days: number;
-}
-
 // The main response object for the Channel Details endpoint
 interface ChannelInfo {
   // Basic Info
@@ -63,20 +48,14 @@ interface ChannelInfo {
   subscriber_count: number;
   calls_analyzed: number;
 
-  // Basic Timeframe Metrics (Flat Structure)
-  total_calls_1d: number;
-  win_rate_1d: number;
-  avg_gain_1d: number;
-  x5_rate_1d: number;
-  x10_rate_1d: number;
-  // ... (metrics for 3d, 7d, 14d, 30d follow the same pattern)
-  total_calls_all: number;
-  win_rate_all: number;
-  avg_gain_all: number;
-  x5_rate_all: number;
-  x10_rate_all: number;
+  // Basic Timeframe Metrics
+  total_calls: number;
+  win_rate: number;
+  avg_gain: number;
+  x5_rate: number;
+  x10_rate: number;
 
-  // Top-Level Advanced Metrics (often null)
+  // Top-Level Advanced Metrics (null when there are not enough calls within the timeframe)
   unique_tokens: number;
   last_call_at: string;
   first_call_at: string;
@@ -88,12 +67,14 @@ interface ChannelInfo {
   intelligent_sl: number | null;
   rds_score: number | null;
   channel_style: string | null;
-  status: string;
-
-  // Nested Advanced Analytics by Timeframe
-  analytics_by_timeframe: {
-    [key: string]: TimeframeAnalytics; // e.g., "30d": { ... }
-  };
+  status: string | null;
+  x_ratio: string | null;
+  x_risk: string | null;
+  x_power: string | null;
+  x_rank: number | null;
+  monty_score: number | null;
+  
+  timeframe_days: number; // all of the metrics are calculated from this timeframe
 }
 ```
 

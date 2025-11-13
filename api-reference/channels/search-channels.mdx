@@ -18,6 +18,10 @@ Search for social media channels that make cryptocurrency token calls. Find chan
   Maximum number of results to return.
 </ParamField>
 
+<ParamField query="timeframe" type="string" default="7d">
+  Time window for metrics. Options: `1d`, `3d`, `7d`, `14d`, `30d`, `all`.
+</ParamField>
+
 ## Response
 
 <ResponseField name="channels" type="array">
@@ -78,9 +82,13 @@ const data: SearchChannelsResponse = await response.json();
       "link": "https://t.me/CryptoGems",
       "subscriber_count": 125000,
       "platform": "telegram",
-      "win_rate": "72.5",
-      "avg_gain": "185.3",
-      "last_updated": "2025-01-15T10:30:00Z"
+      "win_rate": "100",
+      "avg_gain": "321",
+      "x5_rate": "33",
+      "x10_rate": "0",
+      "total_calls": "3",
+      "last_updated": "2025-11-12T12:51:33.974Z",
+      "timeframe_days": 7
     }
   ],
   "count": 1
