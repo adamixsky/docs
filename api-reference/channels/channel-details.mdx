@@ -6,12 +6,16 @@ description: "Get detailed information and statistics for a specific channel"
 
 ## Overview
 
-Retrieve comprehensive information about a specific channel. The response includes both a flat structure with basic performance metrics (e.g., `win_rate_1d`) and a nested `analytics_by_timeframe` object with more advanced, calculated statistics.
+Retrieve comprehensive information about a specific channel. The response includes both a flat structure with basic performance metrics (e.g., `win_rate_1d`) and more advanced, calculated statistics.
 
 ## Request
 
 <ParamField path="channelId" type="string" required>
   Unique channel identifier (e.g., "@adamowicztw")
+</ParamField>
+
+<ParamField query="timeframe" type="string">
+  Time window for metrics. Options: `1d`, `3d`, `7d`, `14d`, `30d`, `all`.
 </ParamField>
 
 ## Response
